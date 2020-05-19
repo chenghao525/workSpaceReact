@@ -9,7 +9,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@material-ui/core": "latest",
+    "@material-ui/core": "^4.9.14",
     "clsx": "latest",
     "react": "latest",
     "react-dom": "latest",
@@ -26,5 +26,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "axios": "^0.19.2",
+    "prop-types": "^15.7.2",
+    "react-edit-inline": "^1.0.8",
+    "react-edit-inline2": "^1.0.2",
+    "react-inline-editing": "^1.0.10"
   }
 }
