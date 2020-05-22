@@ -8,7 +8,9 @@ import {
 } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import CertificationCard from "./CertificationCard"
+import CertificationDisplayCard from "./CertificationDisplayCard";
+import CertificationEditCard from "./CertificationEditCard";
+import CertificationPopup from "./CertificationPopup";
 
 const theme = createMuiTheme({
   palette: {
@@ -81,6 +83,19 @@ const useStyles = makeStyles({
 });
 
 export default function CertificationBox() {
+  const classes = useStyles();
+  const [openModal, setOpenModal] = React.useState(false);
+
+  const handleOpen = (e) => {
+    console.log("Button triggered");
+    setOpenModal(true);
+  };
+
+  const handleClose = () =>{
+    console.log("Closing modal");
+    setOpenModal(false);
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <div id="cert-box">
@@ -89,9 +104,13 @@ export default function CertificationBox() {
           <h4>Track all of your credentials and know your compliance.</h4>
         </div>
         <div id="cards-container">
-          <CertificationCard />
+          <CertificationDisplayCard />
+          <CertificationEditCard />
         </div>
-        <div id="add-btn-container">button</div>
+        <div id="add-btn-container">
+          <Button onClick={handleOpen}>+ Add a new License(s)</Button>
+        </div>
+        <CertificationPopup openModal={openModal} closeModal={handleClose}/>
       </div>
     </ThemeProvider>
   );

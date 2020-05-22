@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.9.14",
+    "@material-ui/lab": "^4.0.0-alpha.53",
     "clsx": "latest",
     "react": "latest",
     "react-dom": "latest",
@@ -28,8 +29,13 @@
     ]
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.9",
     "axios": "^0.19.2",
+    "bootstrap": "^4.5.0",
     "prop-types": "^15.7.2",
+    "react-bootstrap": "^1.0.1",
     "react-edit-inline": "^1.0.8",
     "react-edit-inline2": "^1.0.2",
     "react-inline-editing": "^1.0.10"
