@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useState,useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import EditableLabel from "react-inline-editing";
-import InlineEdit from "react-edit-inline2";
 import "../styles/Certification.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import calendarImage from "../images/calendar.png";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import {DatePicker,MuiPickersUtilsProvider} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns"; // choose your lib
+import DatePickerModal from "./DatePickerModal"
 require("../images/calendar.png");
 
 const useStyles = makeStyles({
@@ -49,27 +50,33 @@ const useStyles = makeStyles({
     margin: "0 2px",
     transform: "scale(0.8)",
   },
-  title: {
-    fontSize: "1.5rem",
+  state: {
+    fontWeight: "bold",
+    fontSize: "2rem",
   },
   pos: {
     marginBottom: 8,
-    fontSize: "1.5rem",
+    fontSize: "1.4rem",
     color: "textSecondary",
   },
   editing: {
     border: "2px solid #9AC2FF",
     borderRadius: "5px",
   },
+  card: {
+    // height:'10rem',
+    marginBottom: "2rem",
+  },
   cardContentContainer: {
     display: "flex",
     // justifyContent:'center',
     // alignContent:'center',
+    height: "10rem",
     alignItems: "center",
   },
-  pencilContainer:{
+  pencilContainer: {
     flex: 1,
-    textAlign:"center",
+    textAlign: "center",
   },
   pencilBackground: {
     background: "#F2F7FF",
@@ -87,13 +94,15 @@ const useStyles = makeStyles({
   },
   textFieldContainer: {
     flex: 2,
+    textAlign: "center",
   },
   calendarContainer: {
-    textAlign:"center",
-    flex:1,
+    textAlign: "center",
+    flex: 1,
   },
   calendarImage: {
     backgroundImage: `url(${calendarImage})`,
+    margin: "auto",
     width: "5rem",
     height: "5rem",
     backgroundSize: "100% 100%",
@@ -120,17 +129,47 @@ const useStyles = makeStyles({
 
 function CertificationDisplayCard(props) {
   const classes = useStyles();
+  const dialogRef = useRef(null);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [date, changeDate] = useState(new Date());
+
+  const handleOpen = (e) => {
+    console.log("Button triggered");
+    setOpenModal(true);
+  };
+
+  const handleClose = () =>{
+    console.log("Closing modal");
+    setOpenModal(false);
+  }
+
+  const handleEdit = ()=>{
+    props.editing();
+  }
 
   const locationDataChanged = (data) => {
     console.log("location", data);
   };
 
+  const setDatePickerDialogReference = (ref) => {
+    // React passes undefined/null if the reference has been unmounted.
+    // datePickerDialog = ref;
+  };
+
+
   return (
-    <Card className={classes.root}>
+    <div>
+    <Card className={classes.card}>
+    <CSSTransition
+              in={props.editingDone}
+              appear={true}
+              timeout={800}
+              classNames="slideIn"
+            >
       <CardContent>
         <div className={classes.cardContentContainer}>
           <div className={classes.pencilContainer}>
-            <Button className={classes.pencilBackground}>
+            <Button className={classes.pencilBackground} onClick={handleEdit}>
               <FontAwesomeIcon
                 icon={faPencilAlt}
                 style={{ color: "#9AC2FF" }}
@@ -139,18 +178,21 @@ function CertificationDisplayCard(props) {
             </Button>
           </div>
           <div className={classes.textFieldContainer}>
-            <Typography className={classes.pos} color="textSecondary">
-            California, USA
+            <Typography className={classes.state} color="textPrimary">
+              California, USA
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
-            Medical Doctor (MD)
+              Medical Doctor (MD)
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
               #MD-20494586342
             </Typography>
           </div>
           <div className={classes.calendarContainer}>
-            <div className={classes.calendarImage}>
+            <button
+              className={classes.calendarImage}
+              onClick={handleOpen}
+            >
               <Typography
                 className={classes.calendaMonth}
                 color="textSecondary"
@@ -160,14 +202,17 @@ function CertificationDisplayCard(props) {
               <Typography className={classes.calendaYear} color="textSecondary">
                 2022
               </Typography>
-            </div>
+            </button>
           </div>
         </div>
       </CardContent>
+      </CSSTransition>
       {/* <CardActions>
         <Button size="small">Learn More</Button>
       </CardActions> */}
     </Card>
+    <DatePickerModal openModal={openModal} closeModal={handleClose}/>
+    </div>
   );
 }
 

@@ -9,9 +9,11 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@date-io/date-fns": "^1.3.13",
     "@material-ui/core": "^4.9.14",
     "@material-ui/lab": "^4.0.0-alpha.53",
     "clsx": "latest",
+    "date-fns": "^2.14.0",
     "react": "latest",
     "react-dom": "latest",
     "react-scripts": "latest"
@@ -32,6 +34,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "@material-ui/pickers": "^3.2.10",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "prop-types": "^15.7.2",

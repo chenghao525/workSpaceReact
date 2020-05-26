@@ -7,10 +7,12 @@ import {
   ThemeProvider,
 } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Button from "@material-ui/core/Button";
 import CertificationDisplayCard from "./CertificationDisplayCard";
 import CertificationEditCard from "./CertificationEditCard";
 import CertificationPopup from "./CertificationPopup";
+import "../styles/Certification.css";
 
 const theme = createMuiTheme({
   palette: {
@@ -85,16 +87,29 @@ const useStyles = makeStyles({
 export default function CertificationBox() {
   const classes = useStyles();
   const [openModal, setOpenModal] = React.useState(false);
+  const [appearCard, setAppearCard] = React.useState(true);
+  const [editing, setEditing] = React.useState(false);
+  const [editingDone, setEditingDone] = React.useState(false);
+  const cards = [0,1,2,3,4,5]
 
   const handleOpen = (e) => {
     console.log("Button triggered");
     setOpenModal(true);
   };
 
-  const handleClose = () =>{
+  const handleClose = () => {
     console.log("Closing modal");
     setOpenModal(false);
-  }
+  };
+
+  const handleEdit = () => {
+    setEditing(true);
+  };
+
+  const handleConfirm = () => {
+    setEditing(false);
+    setEditingDone(true);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -104,13 +119,23 @@ export default function CertificationBox() {
           <h4>Track all of your credentials and know your compliance.</h4>
         </div>
         <div id="cards-container">
-          <CertificationDisplayCard />
-          <CertificationEditCard />
+        {cards.map(i => {
+          return (editing ? (
+            <CertificationEditCard editing={editing} confirm={handleConfirm} />
+          ) : (
+            <CertificationDisplayCard
+              editing={handleEdit}
+              editingDone={editingDone}
+            />
+          ))
+        })
+        }
+          
         </div>
         <div id="add-btn-container">
           <Button onClick={handleOpen}>+ Add a new License(s)</Button>
         </div>
-        <CertificationPopup openModal={openModal} closeModal={handleClose}/>
+        <CertificationPopup openModal={openModal} closeModal={handleClose} />
       </div>
     </ThemeProvider>
   );
