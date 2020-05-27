@@ -9,8 +9,7 @@ import {
 import TextField from "@material-ui/core/TextField";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Button from "@material-ui/core/Button";
-import CertificationDisplayCard from "./CertificationDisplayCard";
-import CertificationEditCard from "./CertificationEditCard";
+import CertificationCardContainer from "./CertificationCardContainer";
 import CertificationPopup from "./CertificationPopup";
 import "../styles/Certification.css";
 
@@ -82,15 +81,32 @@ const useStyles = makeStyles({
     height: "7rem",
     borderRadius: "50%",
   },
+  showMoreBtn:{
+    display:'block',
+    width:"100%",
+    color:'#5894C3',
+    // border: '2px solid black',
+    marginBottom: '20px'
+
+  },
+  addNewBtn:{
+    display:'block',
+    width:"100%",
+    color:'white',
+    backgroundColor:'#9AC2FF'
+  }
 });
 
 export default function CertificationBox() {
   const classes = useStyles();
+  const cards = [0, 1, 2, 3, 4];
+  const numOfCardLeft = cards.length - 2;
   const [openModal, setOpenModal] = React.useState(false);
-  const [appearCard, setAppearCard] = React.useState(true);
-  const [editing, setEditing] = React.useState(false);
-  const [editingDone, setEditingDone] = React.useState(false);
-  const cards = [0,1,2,3,4,5]
+  const [buttonText, setButtonText] = React.useState("View "+ numOfCardLeft + " more License(s)");
+  const [showMore, setShowMore] = React.useState(false);
+  const numberOfCards = showMore ? cards.length : 2;
+
+
 
   const handleOpen = (e) => {
     console.log("Button triggered");
@@ -102,15 +118,17 @@ export default function CertificationBox() {
     setOpenModal(false);
   };
 
-  const handleEdit = () => {
-    setEditing(true);
-  };
+  const handleShowMore = () =>{
+    if(!showMore){
+      setButtonText("View less")
+      setShowMore(!showMore)
+    }else{
+      setButtonText("View "+ numOfCardLeft + " more License(s)")
+      setShowMore(!showMore)
+    }
+  }
 
-  const handleConfirm = () => {
-    setEditing(false);
-    setEditingDone(true);
-  };
-
+  
   return (
     <ThemeProvider theme={theme}>
       <div id="cert-box">
@@ -119,21 +137,15 @@ export default function CertificationBox() {
           <h4>Track all of your credentials and know your compliance.</h4>
         </div>
         <div id="cards-container">
-        {cards.map(i => {
-          return (editing ? (
-            <CertificationEditCard editing={editing} confirm={handleConfirm} />
-          ) : (
-            <CertificationDisplayCard
-              editing={handleEdit}
-              editingDone={editingDone}
-            />
-          ))
-        })
-        }
-          
+          {cards.slice(0, numberOfCards).map((item) => {
+            return <CertificationCardContainer />;
+          })}
         </div>
-        <div id="add-btn-container">
-          <Button onClick={handleOpen}>+ Add a new License(s)</Button>
+
+        <div id="bottom-btn-container">
+        {numOfCardLeft>0?<Button className={classes.showMoreBtn} onClick={handleShowMore}>{buttonText}</Button>:""}
+          
+          <Button className={classes.addNewBtn} onClick={handleOpen}>+ Add a new License(s)</Button>
         </div>
         <CertificationPopup openModal={openModal} closeModal={handleClose} />
       </div>

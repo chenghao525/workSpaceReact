@@ -5,10 +5,13 @@ import TextField from "@material-ui/core/TextField";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -25,12 +28,9 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
-  contentBox: {
-    backgroundColor: "#fff",
-    width: "45%",
-    height: "35%",
+  licenseBox: {
+    // height:'10rem'
   },
-  licenseBox: {},
 }));
 
 export default function TransitionsModal(props) {
@@ -52,6 +52,58 @@ export default function TransitionsModal(props) {
           <Modal.Title>Add New License</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <form className={classes.root} noValidate autoComplete="off">
+            <div className={classes.licenseBox}>
+              {/* <InputLabel id="state-selector">State</InputLabel> */}
+              <Autocomplete
+                id="combo-box-demo"
+                labelId="state-selector"
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                style={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="State" margin="normal" />
+                )}
+              />
+            </div>
+            <div className={classes.licenseBox}>
+              {/* <InputLabel id="license-input">License</InputLabel> */}
+              <Autocomplete
+                id="combo-box-demo"
+                labelId="license-input"
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                style={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="License"  margin="normal" />
+                )}
+              />
+            </div>
+            <div className={classes.licenseBox}>
+              {/* <InputLabel id="licenseNum-input">License Number</InputLabel> */}
+              <TextField
+                style={{ display: "block",width: '100%', marginTop:"1rem" }}
+                id="standard-basic"
+                labelId="licenseNum-input"
+                placeholder="Type to add"
+                label="License Number"
+              />
+            </div>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Add License
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      {/* <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Add New License</DialogTitle>
+ 
+        <DialogContent>
           <form className={classes.root} noValidate autoComplete="off">
             <div className={classes.licenseBox}>
               <InputLabel id="state-selector">State</InputLabel>
@@ -88,16 +140,16 @@ export default function TransitionsModal(props) {
               />
             </div>
           </form>
-        </Modal.Body>
-        <Modal.Footer>
+        </DialogContent>
+        <DialogActions>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
           <Button variant="primary" onClick={handleClose}>
             Add License
           </Button>
-        </Modal.Footer>
-      </Modal>
+        </DialogActions>
+      </Dialog> */}
     </div>
   );
 }
