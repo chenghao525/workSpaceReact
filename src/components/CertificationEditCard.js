@@ -14,8 +14,14 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core";
+import { useBeforeunload } from 'react-beforeunload';
+import Tooltip from '@material-ui/core/Tooltip';
 import "../styles/Certification.css";
-import { DatePicker, MuiPickersUtilsProvider,KeyboardDatePicker, } from "@material-ui/pickers";
+import {
+  DatePicker,
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 require("../images/calendar.png");
@@ -100,7 +106,7 @@ const useStyles = makeStyles({
   },
   stateContainer: {
     display: "flex",
-    // height:'4rem'
+    height: "3rem",
   },
   otherStateBtn: {
     fontSize: "0.8rem",
@@ -109,6 +115,7 @@ const useStyles = makeStyles({
   },
   stateAutoCom: {
     flex: 3,
+    height: "3rem",
   },
   textFieldContainer: {
     textAlign: "center",
@@ -145,7 +152,7 @@ const useStyles = makeStyles({
   },
   editMoreButton: {
     display: "flex",
-    margin: "6px 0",
+    margin: "10px 0",
     width: "100%",
     fontSize: "0.5rem",
     color: "#5894C3",
@@ -160,20 +167,22 @@ const defaultMaterialTheme = createMuiTheme({
 
 function CertificationEditCard(props) {
   const classes = useStyles();
+  const [state, setState] = useState("California, USA")
   const [licenseNum, setLicenseNum] = useState("#MD-20494586342");
   const [licenseType, setLicenseType] = useState("Medical Doctor(MD)");
   const [otherState, setOtherState] = useState(false);
   const [editMore, setEditMore] = useState(false);
   const [date, changeDate] = useState(new Date());
-
-
+  const [changeNotSaved, setChangeNotSaved] = useState(false);
 
   const stateDataChanged = (data) => {
     console.log("location", data);
   };
 
   const licenseNumChange = (e) => {
+    console.log("Number changed")
     setLicenseNum(e.target.value);
+    setChangeNotSaved(true);
   };
 
   const licenseTypeChange = (e) => {
@@ -184,14 +193,34 @@ function CertificationEditCard(props) {
     props.confirm();
   };
 
+  const getSelectedState = () => {
+    const item = top100Films.find((opt) => {
+      // console.log("Compare,", opt.title);
+      if (opt.title === state) return opt;
+    });
+    return item || "";
+  };
+
   //"title" need to change
   const getSelectedLicenseType = () => {
     const item = top100Films.find((opt) => {
-      console.log("Compare,", opt.title);
+      // console.log("Compare,", opt.title);
       if (opt.title === licenseType) return opt;
     });
-    return item || {};
+    return item || "";
   };
+
+  const handleFormChange = () =>{
+    console.log("Form change")
+  }
+
+  React.useEffect(() => {
+    if (!changeNotSaved) return;
+    window.addEventListener("beforeunload", (event)=>{
+      event.returnValue = `You have unsaved changes!`;
+    });
+    // return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [changeNotSaved]);
 
   return (
     <Card className={classes.card}>
@@ -199,23 +228,15 @@ function CertificationEditCard(props) {
         <CardContent>
           <div className={classes.cardContentContainer}>
             <div className={classes.textFieldContainer}>
+            <form onChange={handleFormChange}>
               {otherState ? (
-                <Autocomplete
-                  id="combo-box-demo"
-                  options={top100Films}
-                  getOptionLabel={(option) => option.title}
-                  style={{ width: "100%", marginBottom: "20px" }}
-                  className={classes.stateAutoCom}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      placeholder="Type any issue body..."
-                      // inputProps={{
-                      //   style: { fontSize: "1rem" },
-                      // }}
-                    />
-                  )}
-                />
+                <TextField
+                id="standard-basic"
+                // value={licenseNum}
+                placeholder="Type any issuing body…"
+                style={{ width: "100%", height: "3rem" }}
+                onChange={licenseNumChange}
+              />
               ) : (
                 <div className={classes.stateContainer}>
                   <Autocomplete
@@ -224,6 +245,7 @@ function CertificationEditCard(props) {
                     getOptionLabel={(option) => option.title}
                     style={{ width: "100%", marginBottom: "8px" }}
                     className={classes.stateAutoCom}
+                    value={getSelectedState()}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -258,7 +280,7 @@ function CertificationEditCard(props) {
                 id="combo-box-demo"
                 options={top100Films}
                 searchText={licenseType}
-                getOptionLabel={(option) => option.title}
+                getOptionLabel={option => option.title?option.title:option}
                 // defaultValue={top100Films[18]}
                 value={getSelectedLicenseType()}
                 //         getOptionSelected={(option, { multiple, value }) => {
@@ -273,8 +295,8 @@ function CertificationEditCard(props) {
                 // }}
                 style={{
                   width: "100%",
-                  marginBottom: "25px",
                   fontSize: "1rem",
+                  height: "3rem",
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -289,16 +311,17 @@ function CertificationEditCard(props) {
               <TextField
                 id="standard-basic"
                 value={licenseNum}
-                style={{ width: "100%",marginBottom: "25px" }}
+                style={{ width: "100%", height: "3rem" }}
                 onChange={licenseNumChange}
               />
 
-              {
-                editMore?(<><Autocomplete
+              {editMore ? (
+                <>
+                  <Autocomplete
                     id="combo-box-demo"
                     options={top100Films}
                     getOptionLabel={(option) => option.title}
-                    style={{ width: "100%", marginBottom: "10px" }}
+                    style={{ width: "100%", height:'3rem' }}
                     className={classes.stateAutoCom}
                     renderInput={(params) => (
                       <TextField
@@ -311,45 +334,52 @@ function CertificationEditCard(props) {
                     )}
                   />
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <ThemeProvider theme={defaultMaterialTheme}>
-          <KeyboardDatePicker
-          disableToolbar
-          variant="inline"
-          format="MM/dd/yyyy"
-          margin="normal"
-          id="date-picker-inline"
-          label="Original issue date"
-          value={date}
-          style={{width:"100%"}}
-          onChange={(date)=>changeDate(date)}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-          </ThemeProvider>
-        </MuiPickersUtilsProvider></>)
-        :<Button className={classes.editMoreButton} onClick={()=>setEditMore(true)}>
-                <span style={{flex:3}}>edit more</span>
-                <FontAwesomeIcon
-                  icon={faCaretDown}
-                  style={{ color: "#BDBDBD"}}
-                  size="2x"
-                />
-              </Button>
-              }
-              
+                    <ThemeProvider theme={defaultMaterialTheme}>
+                      <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="MM/dd/yyyy"
+                        id="date-picker-inline"
+                        label="Original issue date"
+                        value={date}
+                        style={{ width: "100%",height:'3rem' }}
+                        onChange={(date) => changeDate(date)}
+                        KeyboardButtonProps={{
+                          "aria-label": "change date",
+                        }}
+                      />
+                    </ThemeProvider>
+                  </MuiPickersUtilsProvider>
+                </>
+              ) : (
+                <Button
+                  className={classes.editMoreButton}
+                  onClick={() => setEditMore(true)}
+                >
+                  <span style={{ flex: 3 }}>edit more</span>
+                  <FontAwesomeIcon
+                    icon={faCaretDown}
+                    style={{ color: "#BDBDBD" }}
+                    size="2x"
+                  />
+                </Button>
+              )}
+              </form>
             </div>
             <div className={classes.pencilContainer}>
+            <Tooltip title="Save" arrow>
               <Button
                 className={classes.pencilBackground}
                 onClick={handleConfirm}
               >
+              
                 <FontAwesomeIcon
                   icon={faCheck}
                   style={{ color: "#fff" }}
                   size="lg"
                 />
               </Button>
+              </Tooltip>
             </div>
           </div>
         </CardContent>
@@ -380,4 +410,5 @@ const top100Films = [
   { title: "Goodfellas", year: 1990 },
   { title: "The Matrix", year: 1999 },
   { title: "Medical Doctor(MD)", year: 1954 },
+  { title: "California, USA", year: 1954 },
 ];

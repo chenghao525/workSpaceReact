@@ -12,6 +12,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import {DatePicker,MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import DatePickerModal from "./DatePickerModal"
+import Tooltip from '@material-ui/core/Tooltip';
 require("../images/calendar.png");
 
 const useStyles = makeStyles({
@@ -169,6 +170,7 @@ function CertificationDisplayCard(props) {
       <CardContent>
         <div className={classes.cardContentContainer}>
           <div className={classes.pencilContainer}>
+          <Tooltip title="Edit" arrow>
             <Button className={classes.pencilBackground} onClick={handleEdit}>
               <FontAwesomeIcon
                 icon={faPencilAlt}
@@ -176,6 +178,7 @@ function CertificationDisplayCard(props) {
                 size="lg"
               />
             </Button>
+          </Tooltip>
           </div>
           <div className={classes.textFieldContainer}>
             <Typography className={classes.state} color="textPrimary">

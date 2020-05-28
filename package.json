@@ -38,6 +38,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "prop-types": "^15.7.2",
+    "react-beforeunload": "^2.2.1",
     "react-bootstrap": "^1.0.1",
     "react-edit-inline": "^1.0.8",
     "react-edit-inline2": "^1.0.2",
