@@ -11,6 +11,10 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Button from "@material-ui/core/Button";
 import CertificationCardContainer from "./CertificationCardContainer";
 import CertificationPopup from "./CertificationPopup";
+import DropZone from "./Dropzone"
+import ReactDropzone from "react-dropzone";
+import {DropzoneArea} from 'material-ui-dropzone'
+// import Dropzone from "react-dropzone";
 import "../styles/Certification.css";
 
 const theme = createMuiTheme({
@@ -81,19 +85,21 @@ const useStyles = makeStyles({
     height: "7rem",
     borderRadius: "50%",
   },
-  showMoreBtn:{
-    display:'block',
-    width:"100%",
-    color:'#5894C3',
+  showMoreBtn: {
+    display: "block",
+    width: "100%",
+    color: "#5894C3",
     // border: '2px solid black',
-    marginBottom: '20px'
-
+    marginBottom: "20px",
   },
-  addNewBtn:{
-    display:'block',
-    width:"100%",
-    color:'white',
-    backgroundColor:'#9AC2FF'
+  addNewBtn: {
+    display: "block",
+    width: "100%",
+    color: "white",
+    backgroundColor: "#9AC2FF",
+  },
+  dropZoneContainer:{
+    width:'18rem'
   }
 });
 
@@ -102,11 +108,11 @@ export default function CertificationBox() {
   const cards = [0, 1, 2, 3, 4];
   const numOfCardLeft = cards.length - 2;
   const [openModal, setOpenModal] = React.useState(false);
-  const [buttonText, setButtonText] = React.useState("View "+ numOfCardLeft + " more License(s)");
+  const [buttonText, setButtonText] = React.useState(
+    "View " + numOfCardLeft + " more License(s)"
+  );
   const [showMore, setShowMore] = React.useState(false);
   const numberOfCards = showMore ? cards.length : 2;
-
-
 
   const handleOpen = (e) => {
     console.log("Button triggered");
@@ -118,17 +124,34 @@ export default function CertificationBox() {
     setOpenModal(false);
   };
 
-  const handleShowMore = () =>{
-    if(!showMore){
-      setButtonText("View less")
-      setShowMore(!showMore)
-    }else{
-      setButtonText("View "+ numOfCardLeft + " more License(s)")
-      setShowMore(!showMore)
+  const handleShowMore = () => {
+    if (!showMore) {
+      setButtonText("View less");
+      setShowMore(!showMore);
+    } else {
+      setButtonText("View " + numOfCardLeft + " more License(s)");
+      setShowMore(!showMore);
     }
+  };
+
+  const onDrop = files => {
+    // POST to a test endpoint for demo purposes
+    // const req = request.post("https://httpbin.org/post");
+
+    // files.forEach(file => {
+    //   req.attach(file.name, file).then(() => {
+    //     console.log("done");
+    //   });
+    // });
+
+    // req.end();
+    console.log("On drop",files);
+  };
+
+  const handleFile = files =>{
+    console.log("On drop",files);
   }
 
-  
   return (
     <ThemeProvider theme={theme}>
       <div id="cert-box">
@@ -143,11 +166,26 @@ export default function CertificationBox() {
         </div>
 
         <div id="bottom-btn-container">
-        {numOfCardLeft>0?<Button className={classes.showMoreBtn} onClick={handleShowMore}>{buttonText}</Button>:""}
-          
-          <Button className={classes.addNewBtn} onClick={handleOpen}>+ Add a new License(s)</Button>
+          {numOfCardLeft > 0 ? (
+            <Button className={classes.showMoreBtn} onClick={handleShowMore}>
+              {buttonText}
+            </Button>
+          ) : (
+            ""
+          )}
+
+          <Button className={classes.addNewBtn} onClick={handleOpen}>
+            + Add a new License(s)
+          </Button>
         </div>
         <CertificationPopup openModal={openModal} closeModal={handleClose} />
+      </div>
+      {/* <DropZone>
+      </DropZone> */}
+      <div className={classes.dropZoneContainer}>
+      <DropzoneArea
+        onChange={handleFile}
+        />
       </div>
     </ThemeProvider>
   );
