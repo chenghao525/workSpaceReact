@@ -1,32 +1,27 @@
 import React, { useState } from "react";
+// import Modal from "@material-ui/core/Modal";
+import Modal from "react-bootstrap/Modal";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
+import BootStrapButton from "react-bootstrap/Button";
 import "../styles/Certification.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import calendarImage from "../images/calendar.png";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core";
-import Tooltip from '@material-ui/core/Tooltip';
-import {countryArray, credential, getStateOption, USStatesArray} from "../data/Selections"
 import "../styles/Certification.css";
 import {
   DatePicker,
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
 require("../images/calendar.png");
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=>({
   textFieldBase: {
     fontSize: "2rem",
     backgroundColor: "#F5F5F5",
@@ -45,7 +40,6 @@ const useStyles = makeStyles({
       color: "rgba(0,0,0,.6)",
     },
   },
-  focused: {},
   chipsRoot: {
     fontSize: "1.8125rem",
     backgroundColor: "#CCE0FF",
@@ -80,25 +74,12 @@ const useStyles = makeStyles({
     marginBottom: "2rem",
   },
   cardContentContainer: {
-    display: "flex",
+    // display: "flex",
     // justifyContent:'center',
     // alignContent:'center',
+    margin:"0 3rem",
     minHeight: "10rem",
     alignItems: "center",
-  },
-  pencilContainer: {
-    flex: 1,
-    textAlign: "center",
-  },
-  pencilBackground: {
-    background: "#CCE0FF",
-    width: "4rem",
-    height: "4rem",
-    borderRadius: "50%",
-    textAlign: "center",
-    lineHeight: "5rem",
-    padding: "3px",
-    // alignSelf: 'center'
   },
   pencil: {
     // width: '50%',
@@ -117,39 +98,6 @@ const useStyles = makeStyles({
     flex: 3,
     height: "3rem",
   },
-  textFieldContainer: {
-    textAlign: "center",
-    flex: 2,
-  },
-  calendarContainer: {
-    flex: 1,
-    textAlign: "center",
-  },
-  calendarImage: {
-    margin: "auto",
-    backgroundImage: `url(${calendarImage})`,
-    width: "5rem",
-    height: "5rem",
-    backgroundSize: "100% 100%",
-    overflow: "hidden",
-  },
-  calendaMonth: {
-    marginTop: "25%",
-    fontSize: "1rem",
-    textAlign: "center",
-    fontWeight: "bold",
-    Width: "100%",
-    whiteSpace: "pre-line",
-    color: "#5894C3",
-  },
-  calendaYear: {
-    fontSize: "1.2rem",
-    textAlign: "center",
-    fontWeight: "bold",
-    Width: "100%",
-    whiteSpace: "pre-line",
-    color: "#5894C3",
-  },
   editMoreButton: {
     display: "flex",
     margin: "10px 0",
@@ -159,13 +107,37 @@ const useStyles = makeStyles({
     backgroundColor: "#F2F2F2",
     height: "1.5rem",
   },
-});
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalFocused: {
+    outline: "none",
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  footButton:{
+    color:"#fff",
+    fontSize:"0.5rem",
+    minWidth:"3rem",
+    height:"2rem",
+    backgroundColor:'#9AC2FF',
+      "&:hover": {
+        backgroundColor: "#5894C3",
+      },
+  }
+}));
 
 const defaultMaterialTheme = createMuiTheme({
   // spacing: 2,
 });
 
-function CertificationEditCard(props) {
+function CredentialPopup(props) {
   const classes = useStyles();
   const [state, setState] = useState("California, USA")
   const [licenseNum, setLicenseNum] = useState("#MD-20494586342");
@@ -174,8 +146,17 @@ function CertificationEditCard(props) {
   const [editMore, setEditMore] = useState(false);
   const [date, changeDate] = useState(new Date());
   const [changeNotSaved, setChangeNotSaved] = useState(false);
-  const [stateOption, setStateOption] = useState(USStatesArray);
+  const [open, setOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    setOpen(props.openModal);
+  }, [props.openModal]);
+
+  const handleClose = () => {
+    props.closeModal();
+    setEditMore(false);
+    setOtherState(false);
+  };
 
   const stateDataChanged = (data) => {
     console.log("location", data);
@@ -195,33 +176,8 @@ function CertificationEditCard(props) {
     props.confirm();
   };
 
-  const getSelectedState = () => {
-    const item = top100Films.find((opt) => {
-      // console.log("Compare,", opt.title);
-      if (opt.title === state) return opt;
-    });
-    return item || "";
-  };
-
-  //"title" need to change
-  const getSelectedLicenseType = () => {
-    const item = top100Films.find((opt) => {
-      // console.log("Compare,", opt.title);
-      if (opt.title === licenseType) return opt;
-    });
-    return item || "";
-  };
-
   const handleFormChange = () =>{
     console.log("Form change")
-  }
-
-  const handleLicenseTypeChange = (event, values) =>{
-    console.log("event: ",event,"values: ",values)
-  }
-
-  const handleCountryChange = (event, values) =>{
-    setStateOption(getStateOption(values));
   }
 
   React.useEffect(() => {
@@ -233,12 +189,13 @@ function CertificationEditCard(props) {
   }, [changeNotSaved]);
 
   return (
-    <Card className={classes.card}>
-      <CSSTransition in={true} appear={true} timeout={300} classNames="slide">
-        <CardContent>
+    <Modal show={open} onHide={handleClose}>
+    <Modal.Header closeButton style={{backgroundColor:"#9AC2FF"}}>
+      <Modal.Title style={{color:"#FFF"}}>Add New License</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
           <div className={classes.cardContentContainer}>
-            <div className={classes.textFieldContainer}>
-            <form onChange={handleFormChange}>
+            <form className={classes.root} noValidate autoComplete="off">
               {otherState ? (
                 <TextField
                 id="standard-basic"
@@ -251,11 +208,10 @@ function CertificationEditCard(props) {
                 <div className={classes.stateContainer}>
                   <Autocomplete
                     id="combo-box-demo"
-                    options={stateOption}
-                    getOptionLabel={(option) => option?option:""}
+                    options={top100Films}
+                    getOptionLabel={(option) => option.title}
                     style={{ width: "100%", marginBottom: "8px" }}
                     className={classes.stateAutoCom}
-                    value={getSelectedState()}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -288,11 +244,9 @@ function CertificationEditCard(props) {
               )}
               <Autocomplete
                 id="combo-box-demo"
-                options={credential}
-                getOptionLabel={option => option?option:""}
+                options={top100Films}
+                getOptionLabel={option => option.title?option.title:option}
                 // defaultValue={top100Films[18]}
-                // value={getSelectedLicenseType()}
-                // onChange={handleLicenseTypeChange}
                 //         getOptionSelected={(option, { multiple, value }) => {
                 //    if (!multiple) {
                 //     /*
@@ -321,7 +275,6 @@ function CertificationEditCard(props) {
               />
               <TextField
                 id="standard-basic"
-                value={licenseNum}
                 placeholder="Credential Number"
                 style={{ width: "100%", height: "3rem" }}
                 onChange={licenseNumChange}
@@ -331,11 +284,10 @@ function CertificationEditCard(props) {
                 <>
                   <Autocomplete
                     id="combo-box-demo"
-                    options={countryArray}
-                    getOptionLabel={(option) => option}
+                    options={top100Films}
+                    getOptionLabel={(option) => option.title}
                     style={{ width: "100%", height:'3rem' }}
                     className={classes.stateAutoCom}
-                    onChange={handleCountryChange}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -355,7 +307,7 @@ function CertificationEditCard(props) {
                         id="date-picker-inline"
                         label="Original issue date"
                         value={date}
-                        style={{ width: "100%",height:'3rem' }}
+                        style={{ width: "100%",height:'3rem',marginBottom:"1rem"}}
                         onChange={(date) => changeDate(date)}
                         KeyboardButtonProps={{
                           "aria-label": "change date",
@@ -378,30 +330,21 @@ function CertificationEditCard(props) {
                 </Button>
               )}
               </form>
-            </div>
-            <div className={classes.pencilContainer}>
-            <Tooltip title="Save" arrow>
-              <Button
-                className={classes.pencilBackground}
-                onClick={handleConfirm}
-              >
-              
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  style={{ color: "#fff" }}
-                  size="lg"
-                />
-              </Button>
-              </Tooltip>
-            </div>
           </div>
-        </CardContent>
-      </CSSTransition>
-    </Card>
+          </Modal.Body>
+        <Modal.Footer>
+          <BootStrapButton className={classes.footButton, "mr-auto"} variant="secondary" onClick={handleClose}>
+            Close
+          </BootStrapButton>
+          <BootStrapButton className={classes.footButton,"btn-primary","btn-add-license"} variant="primary" onClick={handleClose}>
+            Add License
+          </BootStrapButton>
+        </Modal.Footer>
+      </Modal>
   );
 }
 
-export default CertificationEditCard;
+export default CredentialPopup;
 
 const top100Films = [
   { title: "The Shawshank Redemption", year: 1994 },

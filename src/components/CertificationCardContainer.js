@@ -1,11 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import axios from "axios";
-import {
-  makeStyles,
-  createMuiTheme,
-  ThemeProvider,
-} from "@material-ui/core/styles";
 import CertificationDisplayCard from "./CertificationDisplayCard";
 import CertificationEditCard from "./CertificationEditCard";
 

@@ -9,8 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import calendarImage from "../images/calendar.png";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import {DatePicker,MuiPickersUtilsProvider} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import DatePickerModal from "./DatePickerModal"
 import Tooltip from '@material-ui/core/Tooltip';
 require("../images/calendar.png");
@@ -210,9 +208,6 @@ function CertificationDisplayCard(props) {
         </div>
       </CardContent>
       </CSSTransition>
-      {/* <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions> */}
     </Card>
     <DatePickerModal openModal={openModal} closeModal={handleClose}/>
     </div>

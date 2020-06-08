@@ -3,8 +3,9 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Link from '@material-ui/core/Link';
-import ProTip from './ProTip';
-import CertificationBox from './components/CertificationBox'
+import AppRouter from "./router/AppRouter";
+// import "./App.css";
+import { BrowserRouter } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -21,15 +22,10 @@ function Copyright() {
 
 export default function App() {
   return (
-    <Container maxWidth="sm">
-      <Box my={4}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Create React App v4-beta example
-        </Typography>
-        <CertificationBox />
-        <ProTip />
-        <Copyright />
-      </Box>
-    </Container>
+    <div className="App">
+        <BrowserRouter>
+          <AppRouter />
+        </BrowserRouter>
+      </div>
   );
 }

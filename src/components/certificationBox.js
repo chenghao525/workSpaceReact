@@ -6,15 +6,9 @@ import {
   createMuiTheme,
   ThemeProvider,
 } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Button from "@material-ui/core/Button";
 import CertificationCardContainer from "./CertificationCardContainer";
-import CertificationPopup from "./CertificationPopup";
-import DropZone from "./Dropzone"
-import ReactDropzone from "react-dropzone";
-import {DropzoneArea} from 'material-ui-dropzone'
-// import Dropzone from "react-dropzone";
+import CredentialPopup from "./CredentialPopup";
 import "../styles/Certification.css";
 
 const theme = createMuiTheme({
@@ -28,6 +22,8 @@ const theme = createMuiTheme({
   },
 });
 
+
+
 const useStyles = makeStyles({
   textFieldBase: {
     fontSize: "2rem",
@@ -39,27 +35,10 @@ const useStyles = makeStyles({
       backgroundColor: "#f3f4f6",
     },
   },
-  textFieldLabel: {
-    fontSize: "1.5rem",
-    fontFamily: "inherit",
-    transform: "translate(12px, 22px) scale(1)",
-    "&$focused": {
-      color: "rgba(0,0,0,.6)",
-    },
+
+  certBox:{
+    margin:'100px 100px',
   },
-  formButton: {
-    height: "36px",
-    textTransform: "none",
-    fontFamily: "inherit",
-    fontSize: "1.6rem",
-    padding: 0,
-  },
-  biggerButton: {
-    height: "56px",
-    fontSize: "2.5rem",
-    marginBottom: "3rem",
-  },
-  focused: {},
   arrowRightBase: {
     padding: 0,
     minWidth: "unset",
@@ -97,10 +76,13 @@ const useStyles = makeStyles({
     width: "100%",
     color: "white",
     backgroundColor: "#9AC2FF",
+    "&:hover": {
+      backgroundColor: "#5894C3",
+    },
   },
-  dropZoneContainer:{
-    width:'18rem'
-  }
+  dropZoneContainer: {
+    width: "18rem",
+  },
 });
 
 export default function CertificationBox() {
@@ -134,27 +116,24 @@ export default function CertificationBox() {
     }
   };
 
-  const onDrop = files => {
-    // POST to a test endpoint for demo purposes
-    // const req = request.post("https://httpbin.org/post");
-
-    // files.forEach(file => {
-    //   req.attach(file.name, file).then(() => {
-    //     console.log("done");
-    //   });
-    // });
-
-    // req.end();
-    console.log("On drop",files);
-  };
-
-  const handleFile = files =>{
-    console.log("On drop",files);
-  }
+  useEffect(()=>{
+    axios({
+      method: "get",
+      url: "http://localhost:8080/addCE-web-1.0/MyProfile",
+      data: {},
+    })
+      .then((response)=>{
+        console.log("res: ", response);
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+      })
+  },[])
 
   return (
     <ThemeProvider theme={theme}>
-      <div id="cert-box">
+      <div id="cert-box" className={classes.certBox}>
         <div id="title-container">
           <h1>Licenses & Certifications</h1>
           <h4>Track all of your credentials and know your compliance.</h4>
@@ -175,17 +154,10 @@ export default function CertificationBox() {
           )}
 
           <Button className={classes.addNewBtn} onClick={handleOpen}>
-            + Add a new License(s)
+            + ADD NEW CREDENTIAL(S)
           </Button>
         </div>
-        <CertificationPopup openModal={openModal} closeModal={handleClose} />
-      </div>
-      {/* <DropZone>
-      </DropZone> */}
-      <div className={classes.dropZoneContainer}>
-      <DropzoneArea
-        onChange={handleFile}
-        />
+        <CredentialPopup openModal={openModal} closeModal={handleClose} />
       </div>
     </ThemeProvider>
   );

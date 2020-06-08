@@ -25,7 +25,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const defaultMaterialTheme = createMuiTheme({
-  // spacing: 2,
+  palette: {
+		primary: {
+			main: '#5894C3',
+			light:  '#5894C3',
+      dark: '#5894C3',
+		},
+		secondary: {
+			main: '#CCE0FF',
+    },
+  },
+    datePicker: {
+      // selectColor: "#BE0F23",
+      // color: palette.primary1Color,
+      // textColor: palette.alternateTextColor,
+      // calendarTextColor: palette.textColor,
+      selectTextColor: "#BE0F23",
+      // calendarYearBackgroundColor: palette.canvasColor,
+      // headerColor: palette.pickerHeaderColor || palette.primary1Color,
+    },
+    overrides: {
+      MuiPickersToolbarText:{
+        toolbarTxt:{
+          color:'#CCE0FF',
+        }
+      },
+    }
 });
 
 export default function DatePickerModal(props) {
