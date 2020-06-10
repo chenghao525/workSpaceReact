@@ -2,7 +2,7 @@ import React from "react";
 import CertificationDisplayCard from "./CertificationDisplayCard";
 import CertificationEditCard from "./CertificationEditCard";
 
-export default function CertificationBox() {
+export default function CertificationBox(props) {
   const [editing, setEditing] = React.useState(false);
   const [editingDone, setEditingDone] = React.useState(false);
 
@@ -16,8 +16,8 @@ export default function CertificationBox() {
   };
 
   return editing ? (
-    <CertificationEditCard editing={editing} confirm={handleConfirm} />
+    <CertificationEditCard editing={editing} confirm={handleConfirm} licenseDetail={props.licenseDetail}/>
   ) : (
-    <CertificationDisplayCard editing={handleEdit} editingDone={editingDone} />
+    <CertificationDisplayCard editing={handleEdit} editingDone={editingDone} licenseDetail={props.licenseDetail}/>
   );
 }

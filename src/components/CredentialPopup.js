@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 // import Modal from "@material-ui/core/Modal";
-import Modal from "react-bootstrap/Modal";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import { Button, Modal,ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import ReactModal from "react-modal";
+import { Modal, Button } from "react-bootstrap";
+// import Modal from "react-bootstrap/Modal";
+// import { Modal, Button } from 'antd';
+// import "bootstrap/dist/css/bootstrap.min.css";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import BootStrapButton from "react-bootstrap/Button";
 import "../styles/Certification.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -90,6 +94,7 @@ const useStyles = makeStyles((theme)=>({
     height: "3rem",
   },
   otherStateBtn: {
+    border:"none",
     fontSize: "0.8rem",
     color: "#5894C3",
     marginBottom: "10px",
@@ -103,9 +108,14 @@ const useStyles = makeStyles((theme)=>({
     margin: "10px 0",
     width: "100%",
     fontSize: "0.5rem",
+    border:"none",
     color: "#5894C3",
     backgroundColor: "#F2F2F2",
     height: "1.5rem",
+    "&:hover":{
+      color:"#5894C3",
+      backgroundColor:"#BCBBBB"
+    }
   },
   modal: {
     display: "flex",
@@ -123,9 +133,10 @@ const useStyles = makeStyles((theme)=>({
   },
   footButton:{
     color:"#fff",
-    fontSize:"0.5rem",
-    minWidth:"3rem",
-    height:"2rem",
+    fontSize:"1rem",
+    border:"none",
+    // minWidth:"3rem",
+    // height:"3rem",
     backgroundColor:'#9AC2FF',
       "&:hover": {
         backgroundColor: "#5894C3",
@@ -189,9 +200,10 @@ function CredentialPopup(props) {
   }, [changeNotSaved]);
 
   return (
-    <Modal show={open} onHide={handleClose}>
+    <Modal show={open}>
     <Modal.Header closeButton style={{backgroundColor:"#9AC2FF"}}>
-      <Modal.Title style={{color:"#FFF"}}>Add New License</Modal.Title>
+      <h4 style={{color:"#FFF"}}>Add New License</h4>
+      {/* Add New License */}
     </Modal.Header>
     <Modal.Body>
           <div className={classes.cardContentContainer}>
@@ -207,7 +219,6 @@ function CredentialPopup(props) {
               ) : (
                 <div className={classes.stateContainer}>
                   <Autocomplete
-                    id="combo-box-demo"
                     options={top100Films}
                     getOptionLabel={(option) => option.title}
                     style={{ width: "100%", marginBottom: "8px" }}
@@ -243,7 +254,6 @@ function CredentialPopup(props) {
                 </div>
               )}
               <Autocomplete
-                id="combo-box-demo"
                 options={top100Films}
                 getOptionLabel={option => option.title?option.title:option}
                 // defaultValue={top100Films[18]}
@@ -283,7 +293,6 @@ function CredentialPopup(props) {
               {editMore ? (
                 <>
                   <Autocomplete
-                    id="combo-box-demo"
                     options={top100Films}
                     getOptionLabel={(option) => option.title}
                     style={{ width: "100%", height:'3rem' }}
@@ -333,14 +342,163 @@ function CredentialPopup(props) {
           </div>
           </Modal.Body>
         <Modal.Footer>
-          <BootStrapButton className={classes.footButton, "mr-auto"} variant="secondary" onClick={handleClose}>
+          <Button className={classes.footButton, "mr-auto"} variant="secondary" onClick={handleClose}>
             Close
-          </BootStrapButton>
-          <BootStrapButton className={classes.footButton,"btn-primary","btn-add-license"} variant="primary" onClick={handleClose}>
+          </Button>
+          <Button className={classes.footButton,"btn-primary","btn-add-license"} variant="primary" onClick={handleClose}>
             Add License
-          </BootStrapButton>
+          </Button>
         </Modal.Footer>
       </Modal>
+    // <Modal
+    //       visible={open}
+    //       title=" Add New License"
+    //       // onOk={this.handleOk}
+    //       onCancel={handleClose}
+    //       footer={[
+    //         <Button key="back" onClick={handleClose} style={{float:"left"}}>
+    //           Close
+    //         </Button>,
+    //         <Button key="submit" type="primary" className={classes.footButton} onClick={handleClose}>
+    //           Add License
+    //         </Button>,
+    //       ]}
+    //     >
+    //       <div className={classes.cardContentContainer}>
+    //         <form className={classes.root} noValidate autoComplete="off">
+    //           {otherState ? (
+    //             <TextField
+    //             id="standard-basic"
+    //             // value={licenseNum}
+    //             placeholder="Type any issuing body…"
+    //             style={{ width: "100%", height: "3rem" }}
+    //             onChange={licenseNumChange}
+    //           />
+    //           ) : (
+    //             <div className={classes.stateContainer}>
+    //               <Autocomplete
+    //                 options={top100Films}
+    //                 getOptionLabel={(option) => option.title}
+    //                 style={{ width: "100%", marginBottom: "8px" }}
+    //                 className={classes.stateAutoCom}
+    //                 renderInput={(params) => (
+    //                   <TextField
+    //                     {...params}
+    //                     placeholder="State"
+    //                     // inputProps={{
+    //                     //   style: { fontSize: "1rem" },
+    //                     // }}
+    //                   />
+    //                 )}
+    //               />
+    //               <p
+    //                 style={{
+    //                   alignSelf: "center",
+    //                   margin: "0 1rem",
+    //                   color: "#757575",
+    //                 }}
+    //               >
+    //                 OR
+    //               </p>
+    //               <Button
+    //                 className={classes.otherStateBtn}
+    //                 onClick={() => {
+    //                   setOtherState(true);
+    //                 }}
+    //               >
+    //                 +<br />
+    //                 other
+    //               </Button>
+    //             </div>
+    //           )}
+    //           <Autocomplete
+    //             options={top100Films}
+    //             getOptionLabel={option => option.title?option.title:option}
+    //             // defaultValue={top100Films[18]}
+    //             //         getOptionSelected={(option, { multiple, value }) => {
+    //             //    if (!multiple) {
+    //             //     /*
+    //             //      * PROPOSAL for single selection, be able to provide own logic.
+    //             //      */
+    //             //     return (option.title === value);
+    //             //    }
+
+    //             //    return false;
+    //             // }}
+    //             style={{
+    //               width: "100%",
+    //               fontSize: "1rem",
+    //               height: "3rem",
+    //             }}
+    //             renderInput={(params) => (
+    //               <TextField
+    //                 {...params}
+    //                 onChange={licenseTypeChange}
+    //                 placeholder="Credential"
+    //                 // inputProps={{
+    //                 //   style: { fontSize: "1rem" },
+    //                 // }}
+    //               />
+    //             )}
+    //           />
+    //           <TextField
+    //             id="standard-basic"
+    //             placeholder="Credential Number"
+    //             style={{ width: "100%", height: "3rem" }}
+    //             onChange={licenseNumChange}
+    //           />
+
+    //           {editMore ? (
+    //             <>
+    //               <Autocomplete
+    //                 options={top100Films}
+    //                 getOptionLabel={(option) => option.title}
+    //                 style={{ width: "100%", height:'3rem' }}
+    //                 className={classes.stateAutoCom}
+    //                 renderInput={(params) => (
+    //                   <TextField
+    //                     {...params}
+    //                     placeholder="Select Country"
+    //                     // inputProps={{
+    //                     //   style: { fontSize: "1rem" },
+    //                     // }}
+    //                   />
+    //                 )}
+    //               />
+    //               <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    //                 <ThemeProvider theme={defaultMaterialTheme}>
+    //                   <KeyboardDatePicker
+    //                     disableToolbar
+    //                     variant="inline"
+    //                     format="MM/dd/yyyy"
+    //                     id="date-picker-inline"
+    //                     label="Original issue date"
+    //                     value={date}
+    //                     style={{ width: "100%",height:'3rem',marginBottom:"1rem"}}
+    //                     onChange={(date) => changeDate(date)}
+    //                     KeyboardButtonProps={{
+    //                       "aria-label": "change date",
+    //                     }}
+    //                   />
+    //                 </ThemeProvider>
+    //               </MuiPickersUtilsProvider>
+    //             </>
+    //           ) : (
+    //             <Button
+    //               className={classes.editMoreButton}
+    //               onClick={() => setEditMore(true)}
+    //             >
+    //               <span style={{ flex: 3,fontSize:'0.8rem',textTransform: 'uppercase', alignSelf:'center'}}>edit more</span>
+    //               <FontAwesomeIcon
+    //                 icon={faCaretDown}
+    //                 style={{ color: "#BDBDBD" }}
+    //                 size="2x"
+    //               />
+    //             </Button>
+    //           )}
+    //           </form>
+    //       </div>
+    //     </Modal>
   );
 }
 

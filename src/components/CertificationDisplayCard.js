@@ -1,4 +1,4 @@
-import React, { useState,useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -9,34 +9,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import calendarImage from "../images/calendar.png";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import DatePickerModal from "./DatePickerModal"
-import Tooltip from '@material-ui/core/Tooltip';
-require("../images/calendar.png");
+import DatePickerModal from "./DatePickerModal";
+import Tooltip from "@material-ui/core/Tooltip";
+import { monthArray } from "../data/Selections";
 
 const useStyles = makeStyles({
-  textFieldBase: {
-    fontSize: "2rem",
-    backgroundColor: "#F5F5F5",
-    "&:hover": {
-      backgroundColor: "rgba(0,0,0,.04)",
-    },
-    "&$focused": {
-      backgroundColor: "#f3f4f6",
-    },
-  },
-  textFieldLabel: {
-    fontSize: "1.5rem",
-    fontFamily: "inherit",
-    transform: "translate(12px, 22px) scale(1)",
-    "&$focused": {
-      color: "rgba(0,0,0,.6)",
-    },
-  },
-  focused: {},
-  chipsRoot: {
-    fontSize: "1.8125rem",
-    backgroundColor: "#CCE0FF",
-  },
   autocompleteOptions: {
     fontSize: "1.5rem",
     fontFamily: "inherit",
@@ -44,18 +21,13 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
   state: {
     fontWeight: "bold",
-    fontSize: "2rem",
+    fontSize: "2.5rem",
   },
   pos: {
     marginBottom: 8,
-    fontSize: "1.4rem",
+    fontSize: "2rem",
     color: "textSecondary",
   },
   editing: {
@@ -63,14 +35,15 @@ const useStyles = makeStyles({
     borderRadius: "5px",
   },
   card: {
-    // height:'10rem',
-    marginBottom: "2rem",
+    borderRadius: "10px",
+    maxWidth: "550px",
+    marginBottom: "4rem",
   },
   cardContentContainer: {
     display: "flex",
     // justifyContent:'center',
     // alignContent:'center',
-    height: "10rem",
+    height: "14rem",
     alignItems: "center",
   },
   pencilContainer: {
@@ -79,8 +52,8 @@ const useStyles = makeStyles({
   },
   pencilBackground: {
     background: "#F2F7FF",
-    width: "4rem",
-    height: "4rem",
+    minWidth: "6rem",
+    height: "6rem",
     borderRadius: "50%",
     textAlign: "center",
     lineHeight: "5rem",
@@ -102,14 +75,14 @@ const useStyles = makeStyles({
   calendarImage: {
     backgroundImage: `url(${calendarImage})`,
     margin: "auto",
-    width: "5rem",
-    height: "5rem",
+    width: "6rem",
+    height: "6rem",
     backgroundSize: "100% 100%",
     overflow: "hidden",
   },
   calendaMonth: {
     marginTop: "25%",
-    fontSize: "1rem",
+    fontSize: "1.3rem",
     textAlign: "center",
     fontWeight: "bold",
     Width: "100%",
@@ -117,7 +90,7 @@ const useStyles = makeStyles({
     color: "#5894C3",
   },
   calendaYear: {
-    fontSize: "1.2rem",
+    fontSize: "1.5rem",
     textAlign: "center",
     fontWeight: "bold",
     Width: "100%",
@@ -131,20 +104,47 @@ function CertificationDisplayCard(props) {
   const dialogRef = useRef(null);
   const [openModal, setOpenModal] = React.useState(false);
   const [date, changeDate] = useState(new Date());
+  const [year, setYear] = useState("");
+  const [monthDay, setMonthDay] = useState("");
+  const [licenseCountry, setLicenseCountry] = useState("");
+  const cardDetail = props.licenseDetail;
+  // let licenseCountry = cardDetail.country;
+
+  useEffect(() => {
+    initRender();
+  }, []);
+
+  const initRender = () => {
+    if (cardDetail.country === "United States") {
+      setLicenseCountry("USA");
+    } else {
+      setLicenseCountry(cardDetail.country);
+    }
+    getDate();
+  };
+
+  const getDate = () => {
+    let dateArray = cardDetail.endDate.split("-");
+    setYear(dateArray[0]);
+    let month = monthArray[parseInt(dateArray[1], 10)];
+    let day = dateArray[2];
+
+    setMonthDay(month + " " + day);
+  };
 
   const handleOpen = (e) => {
     console.log("Button triggered");
     setOpenModal(true);
   };
 
-  const handleClose = () =>{
+  const handleClose = () => {
     console.log("Closing modal");
     setOpenModal(false);
-  }
+  };
 
-  const handleEdit = ()=>{
+  const handleEdit = () => {
     props.editing();
-  }
+  };
 
   const locationDataChanged = (data) => {
     console.log("location", data);
@@ -155,61 +155,63 @@ function CertificationDisplayCard(props) {
     // datePickerDialog = ref;
   };
 
-
   return (
     <div>
-    <Card className={classes.card}>
-    <CSSTransition
-              in={props.editingDone}
-              appear={true}
-              timeout={800}
-              classNames="slideIn"
-            >
-      <CardContent>
-        <div className={classes.cardContentContainer}>
-          <div className={classes.pencilContainer}>
-          <Tooltip title="Edit" arrow>
-            <Button className={classes.pencilBackground} onClick={handleEdit}>
-              <FontAwesomeIcon
-                icon={faPencilAlt}
-                style={{ color: "#9AC2FF" }}
-                size="lg"
-              />
-            </Button>
-          </Tooltip>
-          </div>
-          <div className={classes.textFieldContainer}>
-            <Typography className={classes.state} color="textPrimary">
-              California, USA
-            </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-              Medical Doctor (MD)
-            </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-              #MD-20494586342
-            </Typography>
-          </div>
-          <div className={classes.calendarContainer}>
-            <button
-              className={classes.calendarImage}
-              onClick={handleOpen}
-            >
-              <Typography
-                className={classes.calendaMonth}
-                color="textSecondary"
-              >
-                Jan 9
-              </Typography>
-              <Typography className={classes.calendaYear} color="textSecondary">
-                2022
-              </Typography>
-            </button>
-          </div>
-        </div>
-      </CardContent>
-      </CSSTransition>
-    </Card>
-    <DatePickerModal openModal={openModal} closeModal={handleClose}/>
+      <Card className={classes.card}>
+        <CSSTransition
+          in={props.editingDone}
+          appear={true}
+          timeout={800}
+          classNames="slideIn"
+        >
+          <CardContent>
+            <div className={classes.cardContentContainer}>
+              <div className={classes.pencilContainer}>
+                <Tooltip title="Edit" arrow>
+                  <Button
+                    className={classes.pencilBackground}
+                    onClick={handleEdit}
+                  >
+                    <FontAwesomeIcon
+                      icon={faPencilAlt}
+                      style={{ color: "#9AC2FF" }}
+                      size="lg"
+                    />
+                  </Button>
+                </Tooltip>
+              </div>
+              <div className={classes.textFieldContainer}>
+                <Typography className={classes.state} color="textPrimary">
+                  {cardDetail.state + ", " + licenseCountry}
+                </Typography>
+                <Typography className={classes.pos} color="textSecondary">
+                  {cardDetail.license}
+                </Typography>
+                <Typography className={classes.pos} color="textSecondary">
+                  {"#" + cardDetail.licenseNumber}
+                </Typography>
+              </div>
+              <div className={classes.calendarContainer}>
+                <button className={classes.calendarImage} onClick={handleOpen}>
+                  <Typography
+                    className={classes.calendaMonth}
+                    color="textSecondary"
+                  >
+                    {monthDay}
+                  </Typography>
+                  <Typography
+                    className={classes.calendaYear}
+                    color="textSecondary"
+                  >
+                    {year}
+                  </Typography>
+                </button>
+              </div>
+            </div>
+          </CardContent>
+        </CSSTransition>
+      </Card>
+      <DatePickerModal openModal={openModal} closeModal={handleClose} />
     </div>
   );
 }

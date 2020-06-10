@@ -18,7 +18,9 @@
     "react": "latest",
     "react-dom": "latest",
     "react-dropzone": "^11.0.1",
-    "react-scripts": "latest"
+    "react-modal": "^3.11.2",
+    "react-scripts": "latest",
+    "reactstrap": "^8.4.1"
   },
   "browserslist": {
     "production": [

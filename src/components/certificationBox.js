@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
 import axios from "axios";
 import {
   makeStyles,
@@ -37,7 +36,8 @@ const useStyles = makeStyles({
   },
 
   certBox:{
-    margin:'100px 100px',
+    maxWidth:"550px",
+    margin:'60px 0',
   },
   arrowRightBase: {
     padding: 0,
@@ -68,6 +68,7 @@ const useStyles = makeStyles({
     display: "block",
     width: "100%",
     color: "#5894C3",
+    backgroundColor:"#fff",
     // border: '2px solid black',
     marginBottom: "20px",
   },
@@ -88,13 +89,20 @@ const useStyles = makeStyles({
 export default function CertificationBox() {
   const classes = useStyles();
   const cards = [0, 1, 2, 3, 4];
-  const numOfCardLeft = cards.length - 2;
+  // const numOfCardLeft = cards.length - 2;
   const [openModal, setOpenModal] = React.useState(false);
+  const [numOfCardNotShown, setNumOfCardNotShown] = React.useState(0);
   const [buttonText, setButtonText] = React.useState(
-    "View " + numOfCardLeft + " more License(s)"
+    "View " + numOfCardNotShown + " more License(s)"
   );
+  const [licenseCardList, SetLicenseCardList] = React.useState([{"license":"MD","country":"United States","endDate":"2020-05-28","lastEndDate":null,"licenseNumber":"88765434567","state":"Alaska","licenseId":"157"},{"license":"RN","country":"United States","endDate":"2020-06-03","lastEndDate":null,"licenseNumber":null,"state":"Connecticut","licenseId":"84"},{"license":"MD","country":"United States","endDate":"2020-06-07","lastEndDate":null,"licenseNumber":null,"state":"Alaska","licenseId":"157"},{"license":"MD","country":"United States","endDate":"2020-06-09","lastEndDate":null,"licenseNumber":null,"state":"Alaska","licenseId":"157"},{"license":"DDS","country":"United States","endDate":"2020-06-26","lastEndDate":null,"licenseNumber":null,"state":"Maine","licenseId":"160"}])
+  // const[numOfCardShown,setNumOfCardShown] = React.useState(0);
   const [showMore, setShowMore] = React.useState(false);
-  const numberOfCards = showMore ? cards.length : 2;
+  const numOfCardShown = showMore ? licenseCardList.length : licenseCardList.length > 2 ? 2 : licenseCardList.length;
+  
+  useEffect(()=>{
+    setNumOfCardNotShown(licenseCardList.length-2);
+  },[licenseCardList])
 
   const handleOpen = (e) => {
     console.log("Button triggered");
@@ -111,41 +119,44 @@ export default function CertificationBox() {
       setButtonText("View less");
       setShowMore(!showMore);
     } else {
-      setButtonText("View " + numOfCardLeft + " more License(s)");
+      setButtonText("View " + numOfCardNotShown + " more License(s)");
       setShowMore(!showMore);
     }
   };
 
   useEffect(()=>{
-    axios({
-      method: "get",
-      url: "http://localhost:8080/addCE-web-1.0/MyProfile",
-      data: {},
-    })
-      .then((response)=>{
-        console.log("res: ", response);
-      })
-      .catch(function (response) {
-        //handle error
-        console.log(response);
-      })
-  },[])
+    setButtonText("View " + numOfCardNotShown + " more License(s)");
+  },[numOfCardNotShown])
+
+  // useEffect(()=>{
+  //   axios({
+  //     method: "get",
+  //     url: "../MyProfile/GetLicenseList",
+  //     data: {},
+  //   })
+  //     .then((response)=>{
+  //       console.log("license cards info: ", response);
+  //       SetLicenseCardList(response.lics);
+  //       // setNumOfCardShown(response.lics?response.lics.length:0);
+  //       setNumOfCardNotShown(response.lics?response.lics.length-2:0);
+  //     })
+  //     .catch(function (response) {
+  //       //handle error
+  //       console.log(response);
+  //     })
+  // },[])
 
   return (
     <ThemeProvider theme={theme}>
       <div id="cert-box" className={classes.certBox}>
-        <div id="title-container">
-          <h1>Licenses & Certifications</h1>
-          <h4>Track all of your credentials and know your compliance.</h4>
-        </div>
         <div id="cards-container">
-          {cards.slice(0, numberOfCards).map((item) => {
-            return <CertificationCardContainer />;
+          {licenseCardList.slice(0, numOfCardShown).map((licenseDetail) => {
+            return <CertificationCardContainer licenseDetail={licenseDetail}/>;
           })}
         </div>
 
         <div id="bottom-btn-container">
-          {numOfCardLeft > 0 ? (
+          {numOfCardNotShown > 0 ? (
             <Button className={classes.showMoreBtn} onClick={handleShowMore}>
               {buttonText}
             </Button>

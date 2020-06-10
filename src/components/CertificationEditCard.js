@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -8,23 +8,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import calendarImage from "../images/calendar.png";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core";
-import Tooltip from '@material-ui/core/Tooltip';
-import {countryArray, credential, getStateOption, USStatesArray} from "../data/Selections"
+import Tooltip from "@material-ui/core/Tooltip";
+import {
+  countryArray,
+  credential,
+  getStateOption,
+  USStatesArray,
+} from "../data/Selections";
 import "../styles/Certification.css";
 import {
   DatePicker,
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-require("../images/calendar.png");
 
 const useStyles = makeStyles({
   textFieldBase: {
@@ -44,11 +45,6 @@ const useStyles = makeStyles({
     "&$focused": {
       color: "rgba(0,0,0,.6)",
     },
-  },
-  focused: {},
-  chipsRoot: {
-    fontSize: "1.8125rem",
-    backgroundColor: "#CCE0FF",
   },
   autocompleteOptions: {
     fontSize: "1.5rem",
@@ -77,13 +73,15 @@ const useStyles = makeStyles({
   },
   card: {
     // height:'15rem',
-    marginBottom: "2rem",
+    borderRadius:"10px",
+    maxWidth: "550px",
+    marginBottom: "4rem",
   },
   cardContentContainer: {
     display: "flex",
     // justifyContent:'center',
     // alignContent:'center',
-    minHeight: "10rem",
+    minHeight: "14rem",
     alignItems: "center",
   },
   pencilContainer: {
@@ -92,8 +90,8 @@ const useStyles = makeStyles({
   },
   pencilBackground: {
     background: "#CCE0FF",
-    width: "4rem",
-    height: "4rem",
+    minWidth: "6rem",
+    height: "6rem",
     borderRadius: "50%",
     textAlign: "center",
     lineHeight: "5rem",
@@ -109,9 +107,8 @@ const useStyles = makeStyles({
     height: "3rem",
   },
   otherStateBtn: {
-    fontSize: "0.8rem",
+    fontSize: "1rem",
     color: "#5894C3",
-    marginBottom: "10px",
   },
   stateAutoCom: {
     flex: 3,
@@ -119,70 +116,72 @@ const useStyles = makeStyles({
   },
   textFieldContainer: {
     textAlign: "center",
-    flex: 2,
-  },
-  calendarContainer: {
-    flex: 1,
-    textAlign: "center",
-  },
-  calendarImage: {
-    margin: "auto",
-    backgroundImage: `url(${calendarImage})`,
-    width: "5rem",
-    height: "5rem",
-    backgroundSize: "100% 100%",
-    overflow: "hidden",
-  },
-  calendaMonth: {
-    marginTop: "25%",
-    fontSize: "1rem",
-    textAlign: "center",
-    fontWeight: "bold",
-    Width: "100%",
-    whiteSpace: "pre-line",
-    color: "#5894C3",
-  },
-  calendaYear: {
-    fontSize: "1.2rem",
-    textAlign: "center",
-    fontWeight: "bold",
-    Width: "100%",
-    whiteSpace: "pre-line",
-    color: "#5894C3",
+    flex: 3,
   },
   editMoreButton: {
     display: "flex",
-    margin: "10px 0",
+    margin: "20px 0 0 0",
     width: "100%",
     fontSize: "0.5rem",
     color: "#5894C3",
     backgroundColor: "#F2F2F2",
-    height: "1.5rem",
+    height: "2rem",
   },
+  datePickerInputLabel:{
+    marginTop:"8px",
+    fontSize:"1.4rem"
+  },
+  datePickerInput:{
+    fontSize:"1.4rem"
+  }
 });
 
 const defaultMaterialTheme = createMuiTheme({
-  // spacing: 2,
+  palette: {
+		primary: {
+			main: '#5894C3',
+			light:  '#5894C3',
+      dark: '#5894C3',
+		},
+		secondary: {
+			main: '#CCE0FF',
+    },
+  },
+  overrides: {
+    MuiSvgIcon:{
+      fontSize:"2rem"
+    }
+  },
 });
 
 function CertificationEditCard(props) {
   const classes = useStyles();
-  const [state, setState] = useState("California, USA")
+  const [state, setState] = useState("California");
+  const [country, setCountry] = useState("USA");
   const [licenseNum, setLicenseNum] = useState("#MD-20494586342");
   const [licenseType, setLicenseType] = useState("Medical Doctor(MD)");
+  const [endDate, setEndDate] = useState("");
   const [otherState, setOtherState] = useState(false);
   const [editMore, setEditMore] = useState(false);
   const [date, changeDate] = useState(new Date());
   const [changeNotSaved, setChangeNotSaved] = useState(false);
   const [stateOption, setStateOption] = useState(USStatesArray);
+  const cardDetail = props.licenseDetail;
 
+  useEffect(()=>{
+    setState(cardDetail.state);
+    setLicenseNum(cardDetail.licenseNumber);
+    setLicenseType(cardDetail.license);
+    setCountry(cardDetail.country);
+
+  },[props.licenseDetail])
 
   const stateDataChanged = (data) => {
     console.log("location", data);
   };
 
   const licenseNumChange = (e) => {
-    console.log("Number changed")
+    console.log("Number changed");
     setLicenseNum(e.target.value);
     setChangeNotSaved(true);
   };
@@ -196,37 +195,44 @@ function CertificationEditCard(props) {
   };
 
   const getSelectedState = () => {
-    const item = top100Films.find((opt) => {
+    const item = stateOption.find((opt) => {
       // console.log("Compare,", opt.title);
-      if (opt.title === state) return opt;
+      if (opt === state) return opt;
     });
     return item || "";
   };
 
-  //"title" need to change
   const getSelectedLicenseType = () => {
-    const item = top100Films.find((opt) => {
+    const item = credential.find((opt) => {
       // console.log("Compare,", opt.title);
-      if (opt.title === licenseType) return opt;
+      if (opt === licenseType) return opt;
     });
     return item || "";
   };
 
-  const handleFormChange = () =>{
-    console.log("Form change")
-  }
+  const getSelectedCountry = () => {
+    const item = countryArray.find((opt) => {
+      // console.log("Compare,", opt.title);
+      if (opt === country) return opt;
+    });
+    return item || "";
+  };
 
-  const handleLicenseTypeChange = (event, values) =>{
-    console.log("event: ",event,"values: ",values)
-  }
+  const handleFormChange = () => {
+    console.log("Form change");
+  };
 
-  const handleCountryChange = (event, values) =>{
+  const handleLicenseTypeChange = (event, values) => {
+    console.log("event: ", event, "values: ", values);
+  };
+
+  const handleCountryChange = (event, values) => {
     setStateOption(getStateOption(values));
-  }
+  };
 
   React.useEffect(() => {
     if (!changeNotSaved) return;
-    window.addEventListener("beforeunload", (event)=>{
+    window.addEventListener("beforeunload", (event) => {
       event.returnValue = `You have unsaved changes!`;
     });
     // return () => window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -238,160 +244,166 @@ function CertificationEditCard(props) {
         <CardContent>
           <div className={classes.cardContentContainer}>
             <div className={classes.textFieldContainer}>
-            <form onChange={handleFormChange}>
-              {otherState ? (
-                <TextField
-                id="standard-basic"
-                // value={licenseNum}
-                placeholder="Type any issuing body…"
-                style={{ width: "100%", height: "3rem" }}
-                onChange={licenseNumChange}
-              />
-              ) : (
-                <div className={classes.stateContainer}>
-                  <Autocomplete
-                    id="combo-box-demo"
-                    options={stateOption}
-                    getOptionLabel={(option) => option?option:""}
-                    style={{ width: "100%", marginBottom: "8px" }}
-                    className={classes.stateAutoCom}
-                    value={getSelectedState()}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        placeholder="State"
-                        // inputProps={{
-                        //   style: { fontSize: "1rem" },
-                        // }}
-                      />
-                    )}
-                  />
-                  <p
-                    style={{
-                      alignSelf: "center",
-                      margin: "0 1rem",
-                      color: "#757575",
-                    }}
-                  >
-                    OR
-                  </p>
-                  <Button
-                    className={classes.otherStateBtn}
-                    onClick={() => {
-                      setOtherState(true);
-                    }}
-                  >
-                    +<br />
-                    other
-                  </Button>
-                </div>
-              )}
-              <Autocomplete
-                id="combo-box-demo"
-                options={credential}
-                getOptionLabel={option => option?option:""}
-                // defaultValue={top100Films[18]}
-                // value={getSelectedLicenseType()}
-                // onChange={handleLicenseTypeChange}
-                //         getOptionSelected={(option, { multiple, value }) => {
-                //    if (!multiple) {
-                //     /*
-                //      * PROPOSAL for single selection, be able to provide own logic.
-                //      */
-                //     return (option.title === value);
-                //    }
-
-                //    return false;
-                // }}
-                style={{
-                  width: "100%",
-                  fontSize: "1rem",
-                  height: "3rem",
-                }}
-                renderInput={(params) => (
+              <form onChange={handleFormChange}>
+                {otherState ? (
                   <TextField
-                    {...params}
-                    onChange={licenseTypeChange}
-                    placeholder="Credential"
-                    // inputProps={{
-                    //   style: { fontSize: "1rem" },
-                    // }}
+                    id="standard-basic"
+                    // value={licenseNum}
+                    placeholder="Type any issuing body…"
+                    style={{ width: "100%", height: "3rem" }}
+                    onChange={licenseNumChange}
                   />
+                ) : (
+                  <div className={classes.stateContainer}>
+                    <Autocomplete
+                      options={stateOption}
+                      getOptionLabel={(option) => (option ? option : "")}
+                      style={{ width: "100%", marginBottom: "8px" }}
+                      className={classes.stateAutoCom}
+                      value={getSelectedState()}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="State"
+                          // inputProps={{
+                          //   style: { fontSize: "1rem" },
+                          // }}
+                        />
+                      )}
+                    />
+                    <p
+                      style={{
+                        alignSelf: "center",
+                        fontSize: "1.5rem",
+                        margin: "0 1rem 0 3rem",
+                        color: "#757575",
+                      }}
+                    >
+                      OR
+                    </p>
+                    <Button
+                      className={classes.otherStateBtn}
+                      onClick={() => {
+                        setOtherState(true);
+                      }}
+                    >
+                      +<br />
+                      other
+                    </Button>
+                  </div>
                 )}
-              />
-              <TextField
-                id="standard-basic"
-                value={licenseNum}
-                placeholder="Credential Number"
-                style={{ width: "100%", height: "3rem" }}
-                onChange={licenseNumChange}
-              />
+                <Autocomplete
+                  options={credential}
+                  getOptionLabel={(option) => (option ? option : "")}
+                  // defaultValue={top100Films[18]}
+                  value={getSelectedLicenseType()}
+                  // onChange={handleLicenseTypeChange}
+                  //         getOptionSelected={(option, { multiple, value }) => {
+                  //    if (!multiple) {
+                  //     /*
+                  //      * PROPOSAL for single selection, be able to provide own logic.
+                  //      */
+                  //     return (option.title === value);
+                  //    }
 
-              {editMore ? (
-                <>
-                  <Autocomplete
-                    id="combo-box-demo"
-                    options={countryArray}
-                    getOptionLabel={(option) => option}
-                    style={{ width: "100%", height:'3rem' }}
-                    className={classes.stateAutoCom}
-                    onChange={handleCountryChange}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        placeholder="Select Country"
-                        // inputProps={{
-                        //   style: { fontSize: "1rem" },
-                        // }}
-                      />
-                    )}
-                  />
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <ThemeProvider theme={defaultMaterialTheme}>
-                      <KeyboardDatePicker
-                        disableToolbar
-                        variant="inline"
-                        format="MM/dd/yyyy"
-                        id="date-picker-inline"
-                        label="Original issue date"
-                        value={date}
-                        style={{ width: "100%",height:'3rem' }}
-                        onChange={(date) => changeDate(date)}
-                        KeyboardButtonProps={{
-                          "aria-label": "change date",
-                        }}
-                      />
-                    </ThemeProvider>
-                  </MuiPickersUtilsProvider>
-                </>
-              ) : (
-                <Button
-                  className={classes.editMoreButton}
-                  onClick={() => setEditMore(true)}
-                >
-                  <span style={{ flex: 3,fontSize:'0.8rem'}}>edit more</span>
-                  <FontAwesomeIcon
-                    icon={faCaretDown}
-                    style={{ color: "#BDBDBD" }}
-                    size="2x"
-                  />
-                </Button>
-              )}
+                  //    return false;
+                  // }}
+                  style={{
+                    width: "100%",
+                    fontSize: "1rem",
+                    height: "3rem",
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      onChange={licenseTypeChange}
+                      placeholder="Credential"
+                      // inputProps={{
+                      //   style: { fontSize: "1rem" },
+                      // }}
+                    />
+                  )}
+                />
+                <TextField
+                  id="standard-basic"
+                  value={licenseNum}
+                  placeholder="Credential Number"
+                  style={{ width: "100%", height: "3rem" }}
+                  onChange={licenseNumChange}
+                />
+
+                {editMore ? (
+                  <>
+                    <Autocomplete
+                      options={countryArray}
+                      getOptionLabel={(option) => option}
+                      style={{ width: "100%", height: "3rem" }}
+                      className={classes.stateAutoCom}
+                      value={getSelectedCountry()}
+                      onChange={handleCountryChange}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="Select Country"
+                          // inputProps={{
+                          //   style: { fontSize: "1rem" },
+                          // }}
+                        />
+                      )}
+                    />
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <ThemeProvider theme={defaultMaterialTheme}>
+                        <KeyboardDatePicker
+                          disableToolbar
+                          variant="inline"
+                          format="MM/dd/yyyy"
+                          id="date-picker-inline"
+                          label="Original issue date"
+                          value={date}
+                          style={{
+                            width: "100%",
+                            height: "3rem",
+                            marginBottom:"10px"
+                          }}
+                          onChange={(date) => changeDate(date)}
+                          KeyboardButtonProps={{
+                            "aria-label": "change date",
+                          }}
+                          InputLabelProps={{
+                            className: classes.datePickerInputLabel
+                          }}
+                          InputProps={{ className: classes.datePickerInput }}
+                        />
+                      </ThemeProvider>
+                    </MuiPickersUtilsProvider>
+                  </>
+                ) : (
+                  <Button
+                    className={classes.editMoreButton}
+                    onClick={() => setEditMore(true)}
+                  >
+                    <span style={{ flex: 3, fontSize: "1rem" }}>edit more</span>
+                    <FontAwesomeIcon
+                      icon={faCaretDown}
+                      style={{ color: "#BDBDBD" }}
+                      size="2x"
+                    />
+                  </Button>
+                )}
               </form>
             </div>
             <div className={classes.pencilContainer}>
-            <Tooltip title="Save" arrow>
-              <Button
-                className={classes.pencilBackground}
-                onClick={handleConfirm}
-              >
-              
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  style={{ color: "#fff" }}
-                  size="lg"
-                />
-              </Button>
+              <Tooltip title="Save" arrow>
+                <Button
+                  className={classes.pencilBackground}
+                  onClick={handleConfirm}
+                >
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    style={{ color: "#fff" }}
+                    size="lg"
+                  />
+                </Button>
               </Tooltip>
             </div>
           </div>

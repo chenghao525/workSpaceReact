@@ -75,3 +75,15 @@ button:focus {
   background-color: #5894C3 !important;
   border-color: #5894C3 !important;
 }
+
+.ant-modal-header{
+  background: #9AC2FF !important;
+}
+
+.ant-modal-title{
+  color:#fff !important;
+}
+
+.ant-modal{
+  border-radius: 50% !important;
+}
