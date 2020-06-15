@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-// import Modal from "@material-ui/core/Modal";
-// import { Button, Modal,ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import ReactModal from "react-modal";
-import { Modal, Button } from "react-bootstrap";
-// import Modal from "react-bootstrap/Modal";
-// import { Modal, Button } from 'antd';
+import { Modal, Button } from 'antd';
 // import "bootstrap/dist/css/bootstrap.min.css";
+import 'antd/dist/antd.css';
 import { makeStyles } from "@material-ui/core/styles";
-// import Button from "@material-ui/core/Button";
 import BootStrapButton from "react-bootstrap/Button";
 import "../styles/Certification.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,7 +12,6 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core";
-import "../styles/Certification.css";
 import {
   DatePicker,
   MuiPickersUtilsProvider,
@@ -26,32 +20,6 @@ import {
 require("../images/calendar.png");
 
 const useStyles = makeStyles((theme)=>({
-  textFieldBase: {
-    fontSize: "2rem",
-    backgroundColor: "#F5F5F5",
-    "&:hover": {
-      backgroundColor: "rgba(0,0,0,.04)",
-    },
-    "&$focused": {
-      backgroundColor: "#f3f4f6",
-    },
-  },
-  textFieldLabel: {
-    fontSize: "1.5rem",
-    fontFamily: "inherit",
-    transform: "translate(12px, 22px) scale(1)",
-    "&$focused": {
-      color: "rgba(0,0,0,.6)",
-    },
-  },
-  chipsRoot: {
-    fontSize: "1.8125rem",
-    backgroundColor: "#CCE0FF",
-  },
-  autocompleteOptions: {
-    fontSize: "1.5rem",
-    fontFamily: "inherit",
-  },
   root: {
     minWidth: 275,
   },
@@ -72,10 +40,6 @@ const useStyles = makeStyles((theme)=>({
   editing: {
     border: "2px solid #9AC2FF",
     borderRadius: "5px",
-  },
-  card: {
-    // height:'15rem',
-    marginBottom: "2rem",
   },
   cardContentContainer: {
     // display: "flex",
@@ -160,6 +124,7 @@ function CredentialPopup(props) {
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
+    console.log("Triggered in popup")
     setOpen(props.openModal);
   }, [props.openModal]);
 
@@ -200,12 +165,20 @@ function CredentialPopup(props) {
   }, [changeNotSaved]);
 
   return (
-    <Modal show={open}>
-    <Modal.Header closeButton style={{backgroundColor:"#9AC2FF"}}>
-      <h4 style={{color:"#FFF"}}>Add New License</h4>
-      {/* Add New License */}
-    </Modal.Header>
-    <Modal.Body>
+    <Modal
+          visible={open}
+          title=" Add New License"
+          // onOk={this.handleOk}
+          onCancel={handleClose}
+          footer={[
+            <Button key="back" onClick={handleClose} style={{float:"left"}}>
+              Close
+            </Button>,
+            <Button key="submit" type="primary" className={classes.footButton} onClick={handleClose}>
+              Add License
+            </Button>,
+          ]}
+        >
           <div className={classes.cardContentContainer}>
             <form className={classes.root} noValidate autoComplete="off">
               {otherState ? (
@@ -330,7 +303,7 @@ function CredentialPopup(props) {
                   className={classes.editMoreButton}
                   onClick={() => setEditMore(true)}
                 >
-                  <span style={{ flex: 3,fontSize:'0.8rem'}}>edit more</span>
+                  <span style={{ flex: 3,fontSize:'0.8rem',textTransform: 'uppercase', alignSelf:'center'}}>edit more</span>
                   <FontAwesomeIcon
                     icon={faCaretDown}
                     style={{ color: "#BDBDBD" }}
@@ -340,165 +313,7 @@ function CredentialPopup(props) {
               )}
               </form>
           </div>
-          </Modal.Body>
-        <Modal.Footer>
-          <Button className={classes.footButton, "mr-auto"} variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button className={classes.footButton,"btn-primary","btn-add-license"} variant="primary" onClick={handleClose}>
-            Add License
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    // <Modal
-    //       visible={open}
-    //       title=" Add New License"
-    //       // onOk={this.handleOk}
-    //       onCancel={handleClose}
-    //       footer={[
-    //         <Button key="back" onClick={handleClose} style={{float:"left"}}>
-    //           Close
-    //         </Button>,
-    //         <Button key="submit" type="primary" className={classes.footButton} onClick={handleClose}>
-    //           Add License
-    //         </Button>,
-    //       ]}
-    //     >
-    //       <div className={classes.cardContentContainer}>
-    //         <form className={classes.root} noValidate autoComplete="off">
-    //           {otherState ? (
-    //             <TextField
-    //             id="standard-basic"
-    //             // value={licenseNum}
-    //             placeholder="Type any issuing body…"
-    //             style={{ width: "100%", height: "3rem" }}
-    //             onChange={licenseNumChange}
-    //           />
-    //           ) : (
-    //             <div className={classes.stateContainer}>
-    //               <Autocomplete
-    //                 options={top100Films}
-    //                 getOptionLabel={(option) => option.title}
-    //                 style={{ width: "100%", marginBottom: "8px" }}
-    //                 className={classes.stateAutoCom}
-    //                 renderInput={(params) => (
-    //                   <TextField
-    //                     {...params}
-    //                     placeholder="State"
-    //                     // inputProps={{
-    //                     //   style: { fontSize: "1rem" },
-    //                     // }}
-    //                   />
-    //                 )}
-    //               />
-    //               <p
-    //                 style={{
-    //                   alignSelf: "center",
-    //                   margin: "0 1rem",
-    //                   color: "#757575",
-    //                 }}
-    //               >
-    //                 OR
-    //               </p>
-    //               <Button
-    //                 className={classes.otherStateBtn}
-    //                 onClick={() => {
-    //                   setOtherState(true);
-    //                 }}
-    //               >
-    //                 +<br />
-    //                 other
-    //               </Button>
-    //             </div>
-    //           )}
-    //           <Autocomplete
-    //             options={top100Films}
-    //             getOptionLabel={option => option.title?option.title:option}
-    //             // defaultValue={top100Films[18]}
-    //             //         getOptionSelected={(option, { multiple, value }) => {
-    //             //    if (!multiple) {
-    //             //     /*
-    //             //      * PROPOSAL for single selection, be able to provide own logic.
-    //             //      */
-    //             //     return (option.title === value);
-    //             //    }
-
-    //             //    return false;
-    //             // }}
-    //             style={{
-    //               width: "100%",
-    //               fontSize: "1rem",
-    //               height: "3rem",
-    //             }}
-    //             renderInput={(params) => (
-    //               <TextField
-    //                 {...params}
-    //                 onChange={licenseTypeChange}
-    //                 placeholder="Credential"
-    //                 // inputProps={{
-    //                 //   style: { fontSize: "1rem" },
-    //                 // }}
-    //               />
-    //             )}
-    //           />
-    //           <TextField
-    //             id="standard-basic"
-    //             placeholder="Credential Number"
-    //             style={{ width: "100%", height: "3rem" }}
-    //             onChange={licenseNumChange}
-    //           />
-
-    //           {editMore ? (
-    //             <>
-    //               <Autocomplete
-    //                 options={top100Films}
-    //                 getOptionLabel={(option) => option.title}
-    //                 style={{ width: "100%", height:'3rem' }}
-    //                 className={classes.stateAutoCom}
-    //                 renderInput={(params) => (
-    //                   <TextField
-    //                     {...params}
-    //                     placeholder="Select Country"
-    //                     // inputProps={{
-    //                     //   style: { fontSize: "1rem" },
-    //                     // }}
-    //                   />
-    //                 )}
-    //               />
-    //               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-    //                 <ThemeProvider theme={defaultMaterialTheme}>
-    //                   <KeyboardDatePicker
-    //                     disableToolbar
-    //                     variant="inline"
-    //                     format="MM/dd/yyyy"
-    //                     id="date-picker-inline"
-    //                     label="Original issue date"
-    //                     value={date}
-    //                     style={{ width: "100%",height:'3rem',marginBottom:"1rem"}}
-    //                     onChange={(date) => changeDate(date)}
-    //                     KeyboardButtonProps={{
-    //                       "aria-label": "change date",
-    //                     }}
-    //                   />
-    //                 </ThemeProvider>
-    //               </MuiPickersUtilsProvider>
-    //             </>
-    //           ) : (
-    //             <Button
-    //               className={classes.editMoreButton}
-    //               onClick={() => setEditMore(true)}
-    //             >
-    //               <span style={{ flex: 3,fontSize:'0.8rem',textTransform: 'uppercase', alignSelf:'center'}}>edit more</span>
-    //               <FontAwesomeIcon
-    //                 icon={faCaretDown}
-    //                 style={{ color: "#BDBDBD" }}
-    //                 size="2x"
-    //               />
-    //             </Button>
-    //           )}
-    //           </form>
-    //       </div>
-    //     </Modal>
+        </Modal>
   );
 }
 

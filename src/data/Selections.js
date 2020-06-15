@@ -784,11 +784,11 @@ function init() {
   stateArray.splice(2, 0, ca_list); // Insert new
 }
 
+init();
+
 export function getStateOption(countryName) {
-  init();
   let countryIndex = countryArray.indexOf(countryName);
   let states = stateArray[countryIndex + 1];
   let stateOption = states.split("|");
-  console.log(stateOption);
   return stateOption;
 }

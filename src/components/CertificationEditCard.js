@@ -161,9 +161,9 @@ function CertificationEditCard(props) {
   const [licenseNum, setLicenseNum] = useState("#MD-20494586342");
   const [licenseType, setLicenseType] = useState("Medical Doctor(MD)");
   const [endDate, setEndDate] = useState("");
-  const [otherState, setOtherState] = useState(false);
+  const [otherStateInput, setOtherStateInput] = useState(false);
   const [editMore, setEditMore] = useState(false);
-  const [date, changeDate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
   const [changeNotSaved, setChangeNotSaved] = useState(false);
   const [stateOption, setStateOption] = useState(USStatesArray);
   const cardDetail = props.licenseDetail;
@@ -173,22 +173,16 @@ function CertificationEditCard(props) {
     setLicenseNum(cardDetail.licenseNumber);
     setLicenseType(cardDetail.license);
     setCountry(cardDetail.country);
-
   },[props.licenseDetail])
 
-  const stateDataChanged = (data) => {
-    console.log("location", data);
-  };
 
-  const licenseNumChange = (e) => {
-    console.log("Number changed");
-    setLicenseNum(e.target.value);
-    setChangeNotSaved(true);
-  };
 
-  const licenseTypeChange = (e) => {
-    setLicenseType(e.target.value);
-  };
+  const handleDateChange = (ISODate)=>{
+    // let correctFormat = ISODate.split("T")
+    console.log("OR:", typeof(ISODate));
+    // console.log("NOW: ", correctFormat[0]);
+    // setDate(correctFormat[0]);
+  }
 
   const handleConfirm = (e) => {
     props.confirm();
@@ -222,12 +216,28 @@ function CertificationEditCard(props) {
     console.log("Form change");
   };
 
+  const handleStateChange = (event, values) => {
+    setState(values);
+  }
+  
+  const handleOtherStateChange = (e) =>{
+    setState(e.target.value);
+  }
+
   const handleLicenseTypeChange = (event, values) => {
     console.log("event: ", event, "values: ", values);
+    setLicenseType(values);
+  };
+
+  const handleLicenseNumChange = (e) => {
+    console.log("Number changed");
+    setLicenseNum(e.target.value);
+    setChangeNotSaved(true);
   };
 
   const handleCountryChange = (event, values) => {
     setStateOption(getStateOption(values));
+    setCountry(values);
   };
 
   React.useEffect(() => {
@@ -245,13 +255,13 @@ function CertificationEditCard(props) {
           <div className={classes.cardContentContainer}>
             <div className={classes.textFieldContainer}>
               <form onChange={handleFormChange}>
-                {otherState ? (
+                {otherStateInput ? (
                   <TextField
                     id="standard-basic"
                     // value={licenseNum}
                     placeholder="Type any issuing body…"
                     style={{ width: "100%", height: "3rem" }}
-                    onChange={licenseNumChange}
+                    onChange={handleOtherStateChange}
                   />
                 ) : (
                   <div className={classes.stateContainer}>
@@ -261,6 +271,7 @@ function CertificationEditCard(props) {
                       style={{ width: "100%", marginBottom: "8px" }}
                       className={classes.stateAutoCom}
                       value={getSelectedState()}
+                      onChange={handleStateChange}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -284,7 +295,7 @@ function CertificationEditCard(props) {
                     <Button
                       className={classes.otherStateBtn}
                       onClick={() => {
-                        setOtherState(true);
+                        setOtherStateInput(true);
                       }}
                     >
                       +<br />
@@ -297,7 +308,7 @@ function CertificationEditCard(props) {
                   getOptionLabel={(option) => (option ? option : "")}
                   // defaultValue={top100Films[18]}
                   value={getSelectedLicenseType()}
-                  // onChange={handleLicenseTypeChange}
+                  onChange={handleLicenseTypeChange}
                   //         getOptionSelected={(option, { multiple, value }) => {
                   //    if (!multiple) {
                   //     /*
@@ -316,7 +327,6 @@ function CertificationEditCard(props) {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      onChange={licenseTypeChange}
                       placeholder="Credential"
                       // inputProps={{
                       //   style: { fontSize: "1rem" },
@@ -329,7 +339,7 @@ function CertificationEditCard(props) {
                   value={licenseNum}
                   placeholder="Credential Number"
                   style={{ width: "100%", height: "3rem" }}
-                  onChange={licenseNumChange}
+                  onChange={handleLicenseNumChange}
                 />
 
                 {editMore ? (
@@ -365,7 +375,7 @@ function CertificationEditCard(props) {
                             height: "3rem",
                             marginBottom:"10px"
                           }}
-                          onChange={(date) => changeDate(date)}
+                          onChange={handleDateChange}
                           KeyboardButtonProps={{
                             "aria-label": "change date",
                           }}
@@ -414,26 +424,3 @@ function CertificationEditCard(props) {
 }
 
 export default CertificationEditCard;
-
-const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-  { title: "The Godfather: Part II", year: 1974 },
-  { title: "The Dark Knight", year: 2008 },
-  { title: "12 Angry Men", year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: "Pulp Fiction", year: 1994 },
-  { title: "The Lord of the Rings: The Return of the King", year: 2003 },
-  { title: "The Good, the Bad and the Ugly", year: 1966 },
-  { title: "Fight Club", year: 1999 },
-  { title: "The Lord of the Rings: The Fellowship of the Ring", year: 2001 },
-  { title: "Star Wars: Episode V - The Empire Strikes Back", year: 1980 },
-  { title: "Forrest Gump", year: 1994 },
-  { title: "Inception", year: 2010 },
-  { title: "The Lord of the Rings: The Two Towers", year: 2002 },
-  { title: "One Flew Over the Cuckoo's Nest", year: 1975 },
-  { title: "Goodfellas", year: 1990 },
-  { title: "The Matrix", year: 1999 },
-  { title: "Medical Doctor(MD)", year: 1954 },
-  { title: "California, USA", year: 1954 },
-];
