@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-// import Modal from "@material-ui/core/Modal";
-import TextField from "@material-ui/core/TextField";
-import Modal from "react-bootstrap/Modal";
+import Button from '@material-ui/core/Button';
 import Dialog from "@material-ui/core/Dialog";
-import Button from "react-bootstrap/Button";
-import "bootstrap/dist/css/bootstrap.min.css";
+import DialogActions from '@material-ui/core/DialogActions';
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core";
@@ -22,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
   datePicker: {
     width: "30rem",
   },
+  footButton:{
+    color:"#5894C3"
+  }
 }));
 
 const defaultMaterialTheme = createMuiTheme({
@@ -35,28 +35,36 @@ const defaultMaterialTheme = createMuiTheme({
 			main: '#CCE0FF',
     },
   },
-    datePicker: {
-      // selectColor: "#BE0F23",
-      // color: palette.primary1Color,
-      // textColor: palette.alternateTextColor,
-      // calendarTextColor: palette.textColor,
-      selectTextColor: "#BE0F23",
-      // calendarYearBackgroundColor: palette.canvasColor,
-      // headerColor: palette.pickerHeaderColor || palette.primary1Color,
-    },
     overrides: {
       MuiPickersToolbarText:{
         toolbarTxt:{
           color:'#CCE0FF',
         }
       },
+      MuiTypography:{
+        body2:{
+          fontSize:"1.2rem"
+        },
+        body1:{
+          fontSize:"1.5rem"
+        },
+        caption:{
+          fontSize:"1rem"
+        },
+        subtitle1:{
+          fontSize:"1.4rem"
+        }
+      },
+
     }
 });
 
 export default function DatePickerModal(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [date, changeDate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+  const [yearSelected, setYearSelected] = useState(false);
+  const [autoOk, setAutoOk] = useState(false);
 
   React.useEffect(() => {
     setOpen(props.openModal);
@@ -66,9 +74,16 @@ export default function DatePickerModal(props) {
     props.closeModal();
   };
 
-  React.useEffect(() => {
-    console.log("newDate", date);
-  }, [date]);
+   const handleSubmit = () =>{
+     console.log("Submit date: ",date);
+     props.onSubmit(date);
+     handleClose();
+   };
+
+
+  // React.useEffect(() => {
+  //   console.log("newDate", date);
+  // }, [date]);
 
   return (
     <div>
@@ -81,15 +96,23 @@ export default function DatePickerModal(props) {
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <ThemeProvider theme={defaultMaterialTheme}>
             <DatePicker
-              autoOk
-              className="datePicker"
+              className={classes.datePicker}
               variant="static"
               openTo="year"
               value={date}
-              onChange={changeDate}
+              // format="yyyy-MM-dd"
+              onChange={date=>{setDate(date)}}
             />
           </ThemeProvider>
         </MuiPickersUtilsProvider>
+        <DialogActions>
+          <Button onClick={handleClose} className={classes.footButton}>
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} className={classes.footButton} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   );

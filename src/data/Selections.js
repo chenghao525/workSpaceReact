@@ -14,6 +14,7 @@ export var monthArray = new Array(
   "Dec"
 );
 
+
 export var credential = new Array(
   "CNA",
   "DDS",
@@ -26,6 +27,19 @@ export var credential = new Array(
   "PE",
   "Other"
 );
+
+export var credentialMap = {
+  "CNA":"Certified Nursing Assitant (CNA)",
+  "DDS":"DDS",
+  "DO":"Doctor of Osteopathy (DO)",
+  "LPN":"LPN",
+  "MD":"Medical Doctor (MD)",
+  "PA":"PA",
+  "RN":"Registered Nurse (RN)",
+  "SE":"SE",
+  "PE":"PE",
+  "Other":"Other"
+}
 
 export var USStatesArray = [
   "Alabama",

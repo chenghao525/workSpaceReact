@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CertificationDisplayCard from "./CertificationDisplayCard";
 import CertificationEditCard from "./CertificationEditCard";
+import CertificationRenewedCard from "./CertificationRenewedCard";
 
 export default function CertificationBox(props) {
   const [editing, setEditing] = React.useState(false);
@@ -13,11 +14,32 @@ export default function CertificationBox(props) {
   const handleConfirm = () => {
     setEditing(false);
     setEditingDone(true);
+    props.saveEdit();
   };
 
+  useEffect(()=>{
+    console.log("Detail:::",props.licenseDetail)
+  },[props.licenseDetail])
+
   return editing ? (
-    <CertificationEditCard editing={editing} confirm={handleConfirm} licenseDetail={props.licenseDetail}/>
+    <CertificationEditCard
+      editing={editing}
+      confirm={handleConfirm}
+      licenseDetail={props.licenseDetail}
+    />
+  ) : props.licenseDetail.previousEndDate === null ? (
+    <CertificationDisplayCard
+      editing={handleEdit}
+      editingDone={editingDone}
+      licenseDetail={props.licenseDetail}
+      refreshList={handleConfirm}
+    />
   ) : (
-    <CertificationDisplayCard editing={handleEdit} editingDone={editingDone} licenseDetail={props.licenseDetail}/>
+    <CertificationRenewedCard
+      editing={handleEdit}
+      editingDone={editingDone}
+      licenseDetail={props.licenseDetail}
+      refreshList={handleConfirm}
+    />
   );
 }

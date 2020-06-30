@@ -21,8 +21,6 @@ const theme = createMuiTheme({
   },
 });
 
-
-
 const useStyles = makeStyles({
   textFieldBase: {
     fontSize: "2rem",
@@ -35,9 +33,9 @@ const useStyles = makeStyles({
     },
   },
 
-  certBox:{
-    maxWidth:"550px",
-    margin:'60px 0',
+  certBox: {
+    maxWidth: "550px",
+    margin: "60px 0",
   },
   arrowRightBase: {
     padding: 0,
@@ -68,7 +66,7 @@ const useStyles = makeStyles({
     display: "block",
     width: "100%",
     color: "#5894C3",
-    backgroundColor:"#fff",
+    backgroundColor: "#fff",
     // border: '2px solid black',
     marginBottom: "20px",
   },
@@ -95,14 +93,69 @@ export default function CertificationBox() {
   const [buttonText, setButtonText] = React.useState(
     "View " + numOfCardNotShown + " more License(s)"
   );
-  const [licenseCardList, SetLicenseCardList] = React.useState([{"license":"MD","country":"United States","endDate":"2020-05-28","lastEndDate":null,"licenseNumber":"88765434567","state":"Alaska","licenseId":"157"},{"license":"RN","country":"United States","endDate":"2020-06-03","lastEndDate":null,"licenseNumber":null,"state":"Connecticut","licenseId":"84"},{"license":"MD","country":"United States","endDate":"2020-06-07","lastEndDate":null,"licenseNumber":null,"state":"Alaska","licenseId":"157"},{"license":"MD","country":"United States","endDate":"2020-06-09","lastEndDate":null,"licenseNumber":null,"state":"Alaska","licenseId":"157"},{"license":"DDS","country":"United States","endDate":"2020-06-26","lastEndDate":null,"licenseNumber":null,"state":"Maine","licenseId":"160"}])
+  const [licenseCardList, SetLicenseCardList] = React.useState([
+    {
+      license: "MD",
+      country: "United States",
+      endDate: "2020-05-28",
+      lastEndDate: null,
+      licenseNumber: "88765434567",
+      state: "Alaska",
+      licenseId: "157",
+      previousEndDate: "2022-06-28",
+    },
+    {
+      license: "RN",
+      country: "United States",
+      endDate: "2020-06-03",
+      lastEndDate: null,
+      licenseNumber: null,
+      state: "Connecticut",
+      licenseId: "84",
+      previousEndDate: null,
+    },
+    {
+      license: "MD",
+      country: "United States",
+      endDate: "2020-06-07",
+      lastEndDate: null,
+      licenseNumber: null,
+      state: "Alaska",
+      licenseId: "157",
+      previousEndDate:null
+    },
+    {
+      license: "MD",
+      country: "United States",
+      endDate: "2020-06-09",
+      lastEndDate: null,
+      licenseNumber: null,
+      state: "Alaska",
+      licenseId: "157",
+      previousEndDate:null
+    },
+    {
+      license: "DDS",
+      country: "United States",
+      endDate: "2020-06-26",
+      lastEndDate: null,
+      licenseNumber: null,
+      state: "Maine",
+      licenseId: "160",
+      previousEndDate:null
+    },
+  ]);
   // const[numOfCardShown,setNumOfCardShown] = React.useState(0);
   const [showMore, setShowMore] = React.useState(false);
-  const numOfCardShown = showMore ? licenseCardList.length : licenseCardList.length > 2 ? 2 : licenseCardList.length;
-  
-  useEffect(()=>{
-    setNumOfCardNotShown(licenseCardList.length-2);
-  },[licenseCardList])
+  const numOfCardShown = showMore
+    ? licenseCardList.length
+    : licenseCardList.length > 2
+    ? 2
+    : licenseCardList.length;
+
+  useEffect(() => {
+    setNumOfCardNotShown(licenseCardList.length - 2);
+  }, [licenseCardList]);
 
   const handleOpen = (e) => {
     console.log("Button triggered");
@@ -124,9 +177,9 @@ export default function CertificationBox() {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setButtonText("View " + numOfCardNotShown + " more License(s)");
-  },[numOfCardNotShown])
+  }, [numOfCardNotShown]);
 
   // useEffect(()=>{
   //   axios({
@@ -151,7 +204,7 @@ export default function CertificationBox() {
       <div id="cert-box" className={classes.certBox}>
         <div id="cards-container">
           {licenseCardList.slice(0, numOfCardShown).map((licenseDetail) => {
-            return <CertificationCardContainer licenseDetail={licenseDetail}/>;
+            return <CertificationCardContainer licenseDetail={licenseDetail} />;
           })}
         </div>
 

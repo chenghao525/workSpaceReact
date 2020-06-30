@@ -87,3 +87,56 @@ button:focus {
 .ant-modal{
   border-radius: 50% !important;
 }
+
+.bar-container {
+  width: 100%;
+  margin: 10px auto; 
+}
+.progressbar {
+  counter-reset: step;
+  margin-right:-57px;
+  margin-left:-82px;
+}
+.progressbar li {
+  list-style-type: none;
+  width: 50%;
+  float: left;
+  font-size: 12px;
+  position: relative;
+  text-align: center;
+  color: #7d7d7d;
+  margin-bottom:2rem;
+}
+.progressbar li:before {
+  width: 1.5rem;
+  height: 1.56rem;
+  content: "";
+  line-height: 30px;
+  border: 2px solid #757575;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  border-radius: 50%;
+  background-color: white;
+  position: relative;
+  z-index: 1;
+}
+.progressbar li:after {
+  width: 100%;
+  height: 2px;
+  content: '';
+  position: absolute;
+  background: #757575;
+  top: 0.7rem;
+  left: -50%;
+}
+.progressbar li:first-child:after {
+  content: none;
+}
+.progressbar li.active {
+  color: black;
+}
+.progressbar li.active:before {
+  border-color: #55b776;
+  background-color: #55b776;
+}

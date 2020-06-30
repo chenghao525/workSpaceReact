@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import axios from "axios";
+import { message } from 'antd';
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import "../styles/Certification.css";
@@ -10,8 +12,10 @@ import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import calendarImage from "../images/calendar.png";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import DatePickerModal from "./DatePickerModal";
+import RenewalPopup from "./RenewalPopup";
 import Tooltip from "@material-ui/core/Tooltip";
-import { monthArray } from "../data/Selections";
+import { monthArray, credentialMap} from "../data/Selections";
+const moment = require('moment')
 
 const useStyles = makeStyles({
   autocompleteOptions: {
@@ -80,7 +84,7 @@ const useStyles = makeStyles({
     backgroundSize: "100% 100%",
     overflow: "hidden",
   },
-  calendaMonth: {
+  calendarMonth: {
     marginTop: "25%",
     fontSize: "1.3rem",
     textAlign: "center",
@@ -89,7 +93,7 @@ const useStyles = makeStyles({
     whiteSpace: "pre-line",
     color: "#5894C3",
   },
-  calendaYear: {
+  calendarYear: {
     fontSize: "1.5rem",
     textAlign: "center",
     fontWeight: "bold",
@@ -102,17 +106,25 @@ const useStyles = makeStyles({
 function CertificationDisplayCard(props) {
   const classes = useStyles();
   const dialogRef = useRef(null);
-  const [openModal, setOpenModal] = React.useState(false);
-  const [date, changeDate] = useState(new Date());
+  const [openRenewalModal, setOpenRenewalModal] = React.useState(false);
+  const [openDateModal, setOpenDateModal] = React.useState(false);
   const [year, setYear] = useState("");
   const [monthDay, setMonthDay] = useState("");
   const [licenseCountry, setLicenseCountry] = useState("");
+  const [renewing, setRenewing] = useState(false);
   const cardDetail = props.licenseDetail;
-  // let licenseCountry = cardDetail.country;
+  const displayCountry = cardDetail.country === "United States" ? "USA" : cardDetail.country;
+
 
   useEffect(() => {
-    initRender();
+    // initRender();
+    getDate();
   }, []);
+
+  useEffect(() => {
+    // initRender();
+    getDate();
+  }, [props.licenseDetail]);
 
   const initRender = () => {
     if (cardDetail.country === "United States") {
@@ -124,27 +136,114 @@ function CertificationDisplayCard(props) {
   };
 
   const getDate = () => {
-    let dateArray = cardDetail.endDate.split("-");
-    setYear(dateArray[0]);
-    let month = monthArray[parseInt(dateArray[1], 10)];
-    let day = dateArray[2];
+    if (cardDetail.endDate) {
+      let dateArray = cardDetail.endDate.split("-");
+      setYear(dateArray[0]);
+      let month = monthArray[parseInt(dateArray[1], 10)];
+      let day = dateArray[2];
 
-    setMonthDay(month + " " + day);
+      setMonthDay(month + " " + day);
+    } else {
+      setYear("Unset");
+      setMonthDay("Unset");
+    }
   };
 
-  const handleOpen = (e) => {
+  const handleRenewalOpen = (e) => {
     console.log("Button triggered");
-    setOpenModal(true);
+    setOpenRenewalModal(true);
   };
 
-  const handleClose = () => {
+  const handleOpenDateModal = (renewing)=>{
+    setRenewing(renewing);
+    setOpenRenewalModal(false);
+    setOpenDateModal(true);
+  }
+
+  const handleRenewalClose = () => {
     console.log("Closing modal");
-    setOpenModal(false);
+    setOpenRenewalModal(false);
+  };
+
+  const handleDateClose = ()=>{
+    setOpenDateModal(false);
   };
 
   const handleEdit = () => {
     props.editing();
   };
+
+  const handleDateSubmit = (date) =>{
+    if(renewing){
+      renewLicense(date);
+    }else{
+      editCurrentDate(date);
+    }
+  };
+
+  const renewLicense = (date)=>{
+    const tmpEndDate = moment(date).format('YYYY-MM-DD HH:mm:ss');
+
+    let params = {
+      endDate:tmpEndDate,
+      license:cardDetail.license,
+      state:cardDetail.state,
+      country:cardDetail.country,
+      originalIssueDate:cardDetail.originalIssueDate,
+      licenseNumber:cardDetail.licenseNumber,
+    };
+
+    axios({
+      method: "post",
+      url: "../MyProfile/AddNewLicense",
+      data: params,
+    })
+        .then((response)=>{
+          // if(response.data.code===1){
+          message.success("New License add successfully")
+          props.refreshList();
+          // }
+        })
+        .catch(function (response) {
+          message.error("Unable to add license now. Please try again later");
+          //handle error
+          console.log(response);
+        })
+  };
+
+  const editCurrentDate = (date)=>{
+    const tmpEndDate = moment(date).format('YYYY-MM-DD HH:mm:ss');
+    // const tmpOrignialIssueDate = moment(date).format('YYYY-MM-DD HH:mm:ss');
+
+    let params = {
+      id:cardDetail.id,
+      endDate:tmpEndDate,
+      license:cardDetail.license,
+      state:cardDetail.state,
+      country:cardDetail.country,
+      originalIssueDate:cardDetail.originalIssueDate,
+      licenseNumber:cardDetail.licenseNumber,
+      firstRenewal: cardDetail.firstRenewal
+    }
+
+    axios({
+      method: "post",
+      url: "../MyProfile/EditLicense",
+      data: params,
+    })
+        .then((response)=>{
+          // if(response.data.code===1){
+          message.success("License expiration date changed");
+          props.refreshList();
+          console.log(response)
+          // }
+        })
+        .catch(function (response) {
+          message.error("Unable to change the expiration date now, please try again later");
+          //handle error
+          console.log(response);
+        })
+  }
 
   const locationDataChanged = (data) => {
     console.log("location", data);
@@ -156,63 +255,65 @@ function CertificationDisplayCard(props) {
   };
 
   return (
-    <div>
-      <Card className={classes.card}>
-        <CSSTransition
-          in={props.editingDone}
-          appear={true}
-          timeout={800}
-          classNames="slideIn"
-        >
-          <CardContent>
-            <div className={classes.cardContentContainer}>
-              <div className={classes.pencilContainer}>
-                <Tooltip title="Edit" arrow>
-                  <Button
-                    className={classes.pencilBackground}
-                    onClick={handleEdit}
-                  >
-                    <FontAwesomeIcon
-                      icon={faPencilAlt}
-                      style={{ color: "#9AC2FF" }}
-                      size="lg"
-                    />
-                  </Button>
+      <div>
+        <Card className={classes.card}>
+          <CSSTransition
+              in={props.editingDone}
+              appear={true}
+              timeout={800}
+              classNames="slideIn"
+          >
+            <CardContent>
+              <div className={classes.cardContentContainer}>
+                <Tooltip title="Edit" placement="bottom" arrow PopperProps={{ disablePortal: true}}>
+                  <div className={classes.pencilContainer}>
+
+                    <Button
+                        className={classes.pencilBackground}
+                        onClick={handleEdit}
+                    >
+                      <FontAwesomeIcon
+                          icon={faPencilAlt}
+                          style={{ color: "#9AC2FF" }}
+                          size="lg"
+                      />
+                    </Button>
+                  </div>
                 </Tooltip>
-              </div>
-              <div className={classes.textFieldContainer}>
-                <Typography className={classes.state} color="textPrimary">
-                  {cardDetail.state + ", " + licenseCountry}
-                </Typography>
-                <Typography className={classes.pos} color="textSecondary">
-                  {cardDetail.license}
-                </Typography>
-                <Typography className={classes.pos} color="textSecondary">
-                  {"#" + cardDetail.licenseNumber}
-                </Typography>
-              </div>
-              <div className={classes.calendarContainer}>
-                <button className={classes.calendarImage} onClick={handleOpen}>
-                  <Typography
-                    className={classes.calendaMonth}
-                    color="textSecondary"
-                  >
-                    {monthDay}
+                <div className={classes.textFieldContainer}>
+                  <Typography className={classes.state} color="textPrimary">
+                    {cardDetail.state + ", " + displayCountry}
                   </Typography>
-                  <Typography
-                    className={classes.calendaYear}
-                    color="textSecondary"
-                  >
-                    {year}
+                  <Typography className={classes.pos} color="textSecondary">
+                    {credentialMap[cardDetail.license]}
                   </Typography>
-                </button>
+                  <Typography className={classes.pos} color="textSecondary">
+                    {"#" + cardDetail.licenseNumber}
+                  </Typography>
+                </div>
+                <div className={classes.calendarContainer}>
+                  <button className={classes.calendarImage} onClick={handleRenewalOpen}>
+                    <Typography
+                        className={classes.calendarMonth}
+                        color="textSecondary"
+                    >
+                      {monthDay}
+                    </Typography>
+                    <Typography
+                        className={classes.calendarYear}
+                        color="textSecondary"
+                    >
+                      {year}
+                    </Typography>
+                  </button>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </CSSTransition>
-      </Card>
-      <DatePickerModal openModal={openModal} closeModal={handleClose} />
-    </div>
+            </CardContent>
+          </CSSTransition>
+        </Card>
+        <DatePickerModal openModal={openDateModal} closeModal={handleDateClose} onSubmit={handleDateSubmit}/>
+        <RenewalPopup openModal={openRenewalModal} closeModal={handleRenewalClose} openDateModal={handleOpenDateModal} />
+      </div>
   );
 }
 
