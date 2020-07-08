@@ -64,7 +64,6 @@ const useStyles = makeStyles({
     nameTextField: {
         width: "25rem",
         // background: "white",
-        // marginLeft: "1rem",
         marginLeft: "16px",
         // height:"3rem"
     },
