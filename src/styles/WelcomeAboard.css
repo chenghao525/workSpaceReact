@@ -1,0 +1,92 @@
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+.welcome-page-container{
+    height: 100vh;
+    background-color: #9AC2FF;
+    padding: 2% 8%;
+}
+
+.welcome-page-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.pic-title-container{
+    height: 25vh;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.checkbox-image{
+    flex:2;
+}
+
+.title-container{
+    flex: 3;
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    justify-content:space-between;
+    margin-left: 6rem;
+    flex-wrap: wrap;
+}
+
+.mid-text-container{
+    /* display: inline-block; */
+    display: flex;
+    margin-top: 3rem;
+    /* justify-content: space-around; */
+}
+
+.credential-info-container{
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    /* margin: 0 2rem; */
+    background: #F7F7F7;
+    height: 25vh;
+    justify-content: space-around;
+    padding: 0 5%;
+}
+
+.first-row-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.second-row-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.state-issuebody-textfield{
+    flex:3;
+}
+
+.expiration-date-picker{
+    flex:2;
+    margin-left: 5rem;
+}
+
+.btn-container{
+    text-align: center;
+}
+
+
+
+/* Resonsive design */
+
+/* @media screen and (max-width: 715px){
+    .pic-title-container{
+        display: block;
+    }
+    .title-container{
+        margin-left: 0;
+    }
+} */
