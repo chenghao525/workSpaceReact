@@ -84,6 +84,16 @@ button:focus {
   color:#fff !important;
 }
 
+.ant-modal-content{
+  border-radius: 10px !important;
+}
+
+.ant-modal-header{
+  background: #9AC2FF !important;
+  border-radius: 10px 10px 0 0 !important;
+  padding: 10px 24px !important;
+}
+
 .ant-modal{
   border-radius: 50% !important;
 }

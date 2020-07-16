@@ -2,30 +2,31 @@ img {
     max-width: 100%;
     max-height: 100%;
 }
-
-
 .welcome-page-container{
     height: 100vh;
     background-color: #9AC2FF;
-    padding: 2% 8%;
+    padding: 100px 128px;
+    widows: 100%;
+    overflow: hidden;
 }
 
 .welcome-page-content{
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     justify-content: space-between;
-    flex-wrap: wrap;
+    flex-wrap: wrap; */
 }
 
 .pic-title-container{
     height: 25vh;
     display: flex;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
 }
 
-.checkbox-image{
-    flex:2;
-}
+/*.checkbox-image{*/
+/*    flex:2;*/
+/*    !*background-image: url('../images/checkbox.png');*!*/
+/*}*/
 
 .title-container{
     flex: 3;
@@ -33,26 +34,59 @@ img {
     text-align: left;
     flex-direction: column;
     justify-content:space-between;
-    margin-left: 6rem;
+    margin-left: 96px !important;
     flex-wrap: wrap;
+}
+
+.welcome-text{
+    font-size: 2.2vw;
+    font-weight: bold;
+}
+
+.thrill-text{
+    font-size: 1.2vw;
+    color: #606060;
+}
+
+.detail-text{
+    font-size: 1.2vw;
+    font-weight: bold;
+    color: #404040;
+}
+
+.profession-text{
+    font-size: 1.8vw;
+}
+
+.which-text{
+    font-size: 1.8vw;
+    margin: auto 0;
+}
+
+.add-text{
+    font-size: 1.5vw;
+    color: #606060;
+    margin: auto 0;
+    margin-left: 8px;
+    font-style: italic;
 }
 
 .mid-text-container{
     /* display: inline-block; */
     display: flex;
-    margin-top: 3rem;
+    margin-top: 48px !important;
     /* justify-content: space-around; */
 }
+
 
 .credential-info-container{
     display: flex;
     text-align: center;
     flex-direction: column;
-    /* margin: 0 2rem; */
     background: #F7F7F7;
     height: 25vh;
     justify-content: space-around;
-    padding: 0 5%;
+    padding: 1% 5% 0;
 }
 
 .first-row-container{
@@ -71,22 +105,138 @@ img {
 
 .expiration-date-picker{
     flex:2;
-    margin-left: 5rem;
+    margin-left: 80px !important;
 }
 
 .btn-container{
     text-align: center;
+}
+.root{
+    height: 48px;
+    background: white;
+}
+
+.titleTextField {
+    width: 80px;
+}
+
+.nameTextField {
+    width: 400px;
+    margin-left: 16px !important;
+}
+.professionTextField {
+    width: 480px;
+    margin-left: 16px !important;
+}
+.stateContainer{
+    display: flex;
+    height: 48px;
+}
+
+.stateAutoCom{
+    flex: 3;
+    height: 48px;
+}
+
+.checkbox{
+    margin-left: 80px !important;
+    margin-right: -3px !important;
+}
+.getStartBtn {
+    width: 19vw;
+    height: 4vw;
+    color:white;
+    font-size: 1.5vw;
+    background: #85C644;
+    margin-top: 48px !important;
+    /* "&:hover": {
+        backgroundColor: "#00750a",
+    } */
+}
+
+.getStartBtn :hover{
+    background-color: "#00750a"
 }
 
 
 
 /* Resonsive design */
 
-/* @media screen and (max-width: 715px){
+@media screen and (max-width: 715px){
+    .welcome-page-container{
+        padding: 10px 10px;
+        widows: 100%;
+        overflow: hidden;
+    }
     .pic-title-container{
         display: block;
+        text-align: center;
     }
     .title-container{
-        margin-left: 0;
+        text-align: center;
+        margin-left: 0 !important;
     }
-} */
+
+    .welcome-text{
+        font-size: 20px;
+        font-weight: bold;
+    }
+    
+    .thrill-text{
+        font-size: 12px;
+        color: #606060;
+    }
+    
+    .detail-text{
+        font-size: 12px;
+        font-weight: bold;
+        color: #404040;
+    }
+    .titleTextField {
+        width: 40px;
+        height: 10px;
+    }
+    
+    .nameTextField {
+        width: 200px;
+        margin-left: 0px;
+    }
+
+    .mid-text-container{
+        /* display: inline-block; */
+        text-align: center;
+        display: block !important;
+        margin-top: 140px !important;
+        /* justify-content: space-around; */
+    }
+    .profession-text{
+        font-size: 16px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .which-text{
+        font-size: 16px;
+        margin: auto 0;
+        display: block !important;
+    }
+    
+    .add-text{
+        display: block !important;
+        font-size: 14px;
+        color: #606060;
+        margin: auto 0;
+        margin-left: 0px;
+        font-style: italic;
+    }
+
+    .which-add-container{
+        display: block !important;
+        text-align: center;
+        margin: 16px 0px !important;
+    }
+
+    .professionTextField {
+        width: 258px;
+        margin-left: 0px !important;
+    }
+}

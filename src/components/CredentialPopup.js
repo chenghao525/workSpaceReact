@@ -4,7 +4,6 @@ import { Modal, Button, message } from "antd";
 import MUIButton from "@material-ui/core/Button";
 import "antd/dist/antd.css";
 import axios from "axios";
-import "../styles/Certification.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
