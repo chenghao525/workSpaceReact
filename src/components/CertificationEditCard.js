@@ -1,11 +1,13 @@
-import React, { useState, useEffect} from "react";
-import { makeStyles, withStyles} from "@material-ui/core/styles";
+import React, { useState, useEffect } from "react";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Popper from '@material-ui/core/Popper';
-import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import Popper from "@material-ui/core/Popper";
+import Checkbox from "@material-ui/core/Checkbox";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -16,7 +18,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core";
-import { message } from 'antd';
+import { message } from "antd";
 import Tooltip from "@material-ui/core/Tooltip";
 import {
   countryArray,
@@ -30,7 +32,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-const moment = require('moment')
+const moment = require("moment");
 
 const useStyles = makeStyles({
   state: {
@@ -48,7 +50,7 @@ const useStyles = makeStyles({
   },
   card: {
     // height:'15rem',
-    borderRadius:"10px",
+    borderRadius: "10px",
     maxWidth: "550px",
     marginBottom: "4rem",
   },
@@ -102,22 +104,22 @@ const useStyles = makeStyles({
     backgroundColor: "#F2F2F2",
     height: "2rem",
   },
-  datePickerInputLabel:{
-    marginTop:"8px",
-    fontSize:"1.4rem"
+  datePickerInputLabel: {
+    marginTop: "8px",
+    fontSize: "1.4rem",
   },
-  datePickerInput:{
-    fontSize:"1.4rem"
+  datePickerInput: {
+    fontSize: "1.4rem",
   },
-  checkbox:{
-    marginTop:"1rem"
-  }
+  checkbox: {
+    marginTop: "1rem",
+  },
 });
 
 const BlueCheckbox = withStyles({
   root: {
     color: "#9AC2FF",
-    '&$checked': {
+    "&$checked": {
       color: "#9AC2FF",
     },
   },
@@ -126,30 +128,30 @@ const BlueCheckbox = withStyles({
 
 const defaultMaterialTheme = createMuiTheme({
   palette: {
-		primary: {
-			main: '#5894C3',
-			light:  '#5894C3',
-      dark: '#5894C3',
-		},
-		secondary: {
-			main: '#CCE0FF',
+    primary: {
+      main: "#5894C3",
+      light: "#5894C3",
+      dark: "#5894C3",
+    },
+    secondary: {
+      main: "#CCE0FF",
     },
   },
   overrides: {
-    MuiSvgIcon:{
-      fontSize:"2rem"
+    MuiSvgIcon: {
+      fontSize: "2rem",
     },
     MuiTypography: {
       body2: {
-        fontSize: "1.2rem"
+        fontSize: "1.2rem",
       },
       body1: {
-        fontSize: "1.5rem"
+        fontSize: "1.5rem",
       },
       caption: {
-        fontSize: "1rem"
+        fontSize: "1rem",
       },
-    }
+    },
   },
 });
 
@@ -170,58 +172,77 @@ function CertificationEditCard(props) {
   const [changeNotSaved, setChangeNotSaved] = useState(false);
   const [firstCycleChecked, setFirstCycleChecked] = useState(0);
   const [stateOption, setStateOption] = useState(USStatesArray);
+  const [cardType, setCardType] = useState("License");
   const cardDetail = props.licenseDetail;
 
-  useEffect(()=>{
+  useEffect(() => {
     setState(cardDetail.state);
     setLicenseNum(cardDetail.licenseNumber);
     setLicenseType(cardDetail.license);
     setCountry(cardDetail.country);
     setFirstCycleChecked(parseInt(cardDetail.firstRenewal));
     convertStringtoDate();
-  },[props.licenseDetail])
+  }, [props.licenseDetail]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setStateOption(getStateOption(cardDetail.country));
-  },[])
+    // getListOfLicenseType();
+  }, []);
 
-  const convertStringtoDate = ()=>{
-    if(cardDetail.originalIssueDate !== null) {
-      let parts = cardDetail.originalIssueDate.split('-');
+  // const getListOfLicenseType = ()=>{
+  //   axios({
+  //     method: "get",
+  //     url: "../MyProfile/GetLicenseTypeList",
+  //     data: {},
+  //   })
+  //       .then((response)=>{
+  //         // if(response.data.code===1){
+  //
+  //         console.log(response)
+  //         // }
+  //       })
+  //       .catch(function (response) {
+  //         //handle error
+  //         console.log(response);
+  //       });
+  // };
+
+  const convertStringtoDate = () => {
+    if (cardDetail.originalIssueDate !== null) {
+      let parts = cardDetail.originalIssueDate.split("-");
       let formatDate = new Date(parts[0], parts[1] - 1, parts[2]);
       setDate(formatDate);
     }
-  }
-
+  };
 
   const handleSave = (e) => {
-    if(licenseType === null || licenseType.length === 0){
+    if (licenseType === null || licenseType.length === 0) {
       message.error("License type cannot be empty");
       return;
     }
     setChangeNotSaved(false);
-    const tmpOriginalIssueDate = moment(date).format('YYYY-MM-DD HH:mm:ss');
+    const tmpOriginalIssueDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
 
     let params = {
-      id:cardDetail.id,
-      endDate:cardDetail.endDate,
-      license:licenseType,
-      state:state,
-      country:country,
-      originalIssueDate:tmpOriginalIssueDate,
-      licenseNumber:licenseNum,
-      firstRenewal:firstCycleChecked
-    }
+      id: cardDetail.id,
+      endDate: cardDetail.endDate,
+      license: licenseType,
+      state: state,
+      country: country,
+      originalIssueDate: tmpOriginalIssueDate,
+      licenseNumber: licenseNum,
+      firstRenewal: firstCycleChecked,
+    };
 
     axios({
       method: "post",
       url: "../MyProfile/EditLicense",
       data: params,
     })
-      .then((response)=>{
+      .then((response) => {
         // if(response.data.code===1){
-          message.success("New license info saved");
-          props.confirm();
+        message.success("New license info saved");
+        props.confirm();
         // }
       })
       .catch(function (response) {
@@ -232,7 +253,6 @@ function CertificationEditCard(props) {
     props.confirm();
   };
 
-
   const getSelectedState = () => {
     const item = stateOption.find((opt) => {
       // console.log("Compare,", opt.title);
@@ -242,7 +262,7 @@ function CertificationEditCard(props) {
   };
 
   const getSelectedLicenseType = () => {
-    const item = credential.find((opt) => {
+    const item = props.licenseTypes.find((opt) => {
       // console.log("Compare,", opt.title);
       if (opt === licenseType) return opt;
     });
@@ -264,12 +284,12 @@ function CertificationEditCard(props) {
   const handleStateChange = (event, values) => {
     setState(values);
     setChangeNotSaved(true);
-  }
-  
-  const handleOtherStateChange = (e) =>{
+  };
+
+  const handleOtherStateChange = (e) => {
     setState(e.target.value);
     setChangeNotSaved(true);
-  }
+  };
 
   const handleLicenseTypeChange = (event, values) => {
     console.log("event: ", event, "values: ", values);
@@ -289,19 +309,23 @@ function CertificationEditCard(props) {
     setChangeNotSaved(true);
   };
 
-  const handleDateChange = (date) =>{
+  const handleCardTypeChange = (e) => {
+    setCardType(e.target.value);
+  };
+
+  const handleDateChange = (date) => {
     setDate(date);
     setChangeNotSaved(true);
   };
 
-  const handleBeforeUnload = (event) =>{
+  const handleBeforeUnload = (event) => {
     event.returnValue = `You have unsaved changes!`;
   };
 
-  const handleCycleCheckboxChange = (event)=>{
-    if(event.target.checked){
+  const handleCycleCheckboxChange = (event) => {
+    if (event.target.checked) {
       setFirstCycleChecked(1);
-    }else{
+    } else {
       setFirstCycleChecked(0);
     }
   };
@@ -310,13 +334,13 @@ function CertificationEditCard(props) {
     if (!changeNotSaved) return;
     window.addEventListener("beforeunload", handleBeforeUnload);
 
-      // window.removeEventListener("beforeunload",handleBeforeUnload);
+    // window.removeEventListener("beforeunload",handleBeforeUnload);
 
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [changeNotSaved]);
 
   React.useEffect(() => {
-    console.log("Renewal: ",firstCycleChecked)
+    console.log("Renewal: ", firstCycleChecked);
   }, [firstCycleChecked]);
 
   return (
@@ -343,8 +367,8 @@ function CertificationEditCard(props) {
                       className={classes.stateAutoCom}
                       value={getSelectedState()}
                       onChange={handleStateChange}
-                      PopperComponent = { (params)=>(
-                          <Popper {...params} disablePortal />
+                      PopperComponent={(params) => (
+                        <Popper {...params} disablePortal />
                       )}
                       renderInput={(params) => (
                         <TextField
@@ -378,7 +402,7 @@ function CertificationEditCard(props) {
                   </div>
                 )}
                 <Autocomplete
-                  options={credential}
+                  options={props.licenseTypes}
                   getOptionLabel={(option) => (option ? option : "")}
                   // defaultValue={top100Films[18]}
                   value={getSelectedLicenseType()}
@@ -388,15 +412,15 @@ function CertificationEditCard(props) {
                     fontSize: "1rem",
                     height: "3rem",
                   }}
-                  PopperComponent = { (params)=>(
-                      <Popper {...params} disablePortal />
+                  PopperComponent={(params) => (
+                    <Popper {...params} disablePortal />
                   )}
                   renderInput={(params) => (
                     <TextField
                       {...params}
                       placeholder="Credential"
                       required
-                      error ={licenseType === null ? true : false}
+                      error={licenseType === null ? true : false}
                       // errorText="License type cannot be empty"
                       // inputProps={{
                       //   style: { fontSize: "1rem" },
@@ -414,6 +438,21 @@ function CertificationEditCard(props) {
 
                 {editMore ? (
                   <>
+                    <Select
+                      labelId="demo-simple-select-outlined-label"
+                      id="demo-simple-select-outlined"
+                      // className={classes.titleTextField}
+                      value={cardType}
+                      onChange={handleCardTypeChange}
+                      placeholder="Card Type"
+                      // input={<OutlinedInput classes={{ root: classes.root }} />}
+                    >
+                      <MenuItem value="License">License</MenuItem>
+                      <MenuItem value="Certification">Certification</MenuItem>
+                      <MenuItem value="Credential">Credential</MenuItem>
+                      <MenuItem value="Designation">Designation</MenuItem>
+                      <MenuItem value="Other">Other</MenuItem>
+                    </Select>
                     <Autocomplete
                       options={countryArray}
                       getOptionLabel={(option) => option}
@@ -421,8 +460,8 @@ function CertificationEditCard(props) {
                       className={classes.stateAutoCom}
                       value={getSelectedCountry()}
                       onChange={handleCountryChange}
-                      PopperComponent = { (params)=>(
-                          <Popper {...params} disablePortal />
+                      PopperComponent={(params) => (
+                        <Popper {...params} disablePortal />
                       )}
                       renderInput={(params) => (
                         <TextField
@@ -447,23 +486,29 @@ function CertificationEditCard(props) {
                           style={{
                             width: "100%",
                             height: "3rem",
-                            marginBottom:"10px"
+                            marginBottom: "10px",
                           }}
                           onChange={handleDateChange}
                           KeyboardButtonProps={{
                             "aria-label": "change date",
                           }}
                           InputLabelProps={{
-                            className: classes.datePickerInputLabel
+                            className: classes.datePickerInputLabel,
                           }}
                           InputProps={{ className: classes.datePickerInput }}
                         />
                       </ThemeProvider>
                     </MuiPickersUtilsProvider>
                     <FormControlLabel
-                        control={<BlueCheckbox checked={firstCycleChecked===1} onChange={handleCycleCheckboxChange} name="firstCycle" />}
-                        label="This is my first cycle period for this credential"
-                        className={classes.checkbox}
+                      control={
+                        <BlueCheckbox
+                          checked={firstCycleChecked === 1}
+                          onChange={handleCycleCheckboxChange}
+                          name="firstCycle"
+                        />
+                      }
+                      label="This is my first cycle period for this credential"
+                      className={classes.checkbox}
                     />
                   </>
                 ) : (
@@ -482,7 +527,12 @@ function CertificationEditCard(props) {
               </form>
             </div>
             <div className={classes.pencilContainer}>
-              <Tooltip title="Save" arrow placement="bottom" PopperProps={{ disablePortal: true, eventsEnabled:true }}>
+              <Tooltip
+                title="Save"
+                arrow
+                placement="bottom"
+                PopperProps={{ disablePortal: true, eventsEnabled: true }}
+              >
                 <Button
                   className={classes.pencilBackground}
                   onClick={handleSave}
