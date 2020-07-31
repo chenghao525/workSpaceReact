@@ -1,26 +1,26 @@
 img {
-    max-width: 100%;
-    max-height: 100%;
+  max-width: 100%;
+  max-height: 100%;
 }
-.welcome-page-container{
-    height: 100vh;
-    background-color: #9AC2FF;
-    padding: 100px 128px;
-    widows: 100%;
-    overflow: hidden;
+.welcome-page-container {
+  height: 100vh;
+  background-color: #9ac2ff;
+  padding: 100px 128px;
+  widows: 100%;
+  overflow: hidden;
 }
 
-.welcome-page-content{
-    /* display: flex;
+.welcome-page-content {
+  /* display: flex;
     flex-direction: column;
     justify-content: space-between;
     flex-wrap: wrap; */
 }
 
-.pic-title-container{
-    height: 25vh;
-    display: flex;
-    /* flex-wrap: wrap; */
+.pic-title-container {
+  height: 25vh;
+  display: flex;
+  /* flex-wrap: wrap; */
 }
 
 /*.checkbox-image{*/
@@ -28,215 +28,329 @@ img {
 /*    !*background-image: url('../images/checkbox.png');*!*/
 /*}*/
 
-.title-container{
-    flex: 3;
-    display: flex;
-    text-align: left;
-    flex-direction: column;
-    justify-content:space-between;
-    margin-left: 96px !important;
-    flex-wrap: wrap;
+.title-container {
+  flex: 3;
+  display: flex;
+  text-align: left;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 96px !important;
+  flex-wrap: wrap;
 }
 
-.welcome-text{
-    font-size: 2.2vw;
-    font-weight: bold;
+.welcome-text {
+  font-size: 2.2vw;
+  font-weight: bold;
 }
 
-.thrill-text{
-    font-size: 1.2vw;
-    color: #606060;
+.thrill-text {
+  font-size: 1.2vw;
+  color: #606060;
 }
 
-.detail-text{
-    font-size: 1.2vw;
-    font-weight: bold;
-    color: #404040;
+.detail-text {
+  font-size: 1.2vw;
+  font-weight: bold;
+  color: #404040;
 }
 
-.profession-text{
-    font-size: 1.8vw;
+.profession-text {
+  font-size: 1.8vw;
 }
 
-.which-text{
-    font-size: 1.8vw;
-    margin: auto 0;
+.which-text {
+  font-size: 1.8vw;
+  margin: auto 0;
 }
 
-.add-text{
-    font-size: 1.5vw;
-    color: #606060;
-    margin: auto 0;
-    margin-left: 8px;
-    font-style: italic;
+.add-text {
+  font-size: 1.5vw;
+  color: #606060;
+  margin: auto 0;
+  margin-left: 8px;
+  font-style: italic;
 }
 
-.mid-text-container{
-    /* display: inline-block; */
-    display: flex;
-    margin-top: 48px !important;
-    /* justify-content: space-around; */
+.mid-text-container {
+  /* display: inline-block; */
+  display: flex;
+  margin-top: 48px !important;
+  /* justify-content: space-around; */
 }
 
-
-.credential-info-container{
-    display: flex;
-    text-align: center;
-    flex-direction: column;
-    background: #F7F7F7;
-    height: 25vh;
-    justify-content: space-around;
-    padding: 1% 5% 0;
+.credential-info-backgraound {
+  background: #f7f7f7;
+  text-align: center;
+  height: 25vh;
 }
 
-.first-row-container{
-    display: flex;
-    justify-content: space-between;
+.credential-info-container {
+  display: flex;
+  text-align: center;
+
+  justify-content: space-around;
+  padding: 1% 5% 0;
 }
 
-.second-row-container{
-    display: flex;
-    justify-content: space-between;
+.left-container {
+  /* display: flex;
+    align-content: space-between; */
+  flex: 3;
+  margin-top: 15px;
 }
 
-.state-issuebody-textfield{
-    flex:3;
+.right-container {
+  /* display: flex;
+    align-content: space-between; */
+  flex: 2;
+  /* margin-top: 0px; */
 }
 
-.expiration-date-picker{
-    flex:2;
-    margin-left: 80px !important;
+.first-row-container {
+  display: flex;
+  justify-content: space-between;
 }
 
-.btn-container{
-    text-align: center;
+.second-row-container {
+  display: flex;
+  justify-content: space-between;
 }
-.root{
-    height: 48px;
-    background: white;
+
+.state-issuebody-textfield {
+  flex: 3;
+  /* margin-top: 15px; */
+}
+
+.expiration-date-picker {
+  flex: 2;
+  margin-left: 60px !important;
+  /* margin-top: 15px; */
+}
+
+.btn-container {
+  text-align: center;
+}
+.root {
+  height: 48px;
+  background: white;
 }
 
 .titleTextField {
-    width: 80px;
+  width: 80px;
 }
 
 .nameTextField {
-    width: 400px;
-    margin-left: 16px !important;
+  width: 400px;
+  margin-left: 16px !important;
 }
 .professionTextField {
-    width: 480px;
-    margin-left: 16px !important;
+  width: 480px;
+  margin-left: 16px !important;
 }
-.stateContainer{
-    display: flex;
-    height: 48px;
-}
-
-.stateAutoCom{
-    flex: 3;
-    height: 48px;
+.stateContainer {
+  display: flex;
+  height: 48px;
 }
 
-.checkbox{
-    margin-left: 80px !important;
-    margin-right: -3px !important;
+.stateAutoCom {
+  flex: 3;
+  height: 48px;
 }
+
+.credential-auto{
+    font-size: 16px;
+    height: 48px;
+    margin-top: 20px;
+}
+
+.or-text {
+  align-self: center;
+  font-size: 24px;
+  margin: 0 16px 0 48px;
+  color: #757575;
+}
+
+.otherStateBtn {
+  font-size: 16px !important;
+  color: #5894c3 !important;
+}
+
+.checkbox {
+  margin-left: 80px !important;
+  margin-right: -3px !important;
+  margin-top: 20px;
+}
+
+.bottom-text {
+  font-size: 1.5vw;
+  font-style: italic;
+  margin-top: 12px;
+}
+
+.question-tooltip{
+    background-color: "Transparent";
+}
+
 .getStartBtn {
-    width: 19vw;
-    height: 4vw;
-    color:white;
-    font-size: 1.5vw;
-    background: #85C644;
-    margin-top: 48px !important;
-    /* "&:hover": {
+  width: 19vw;
+  height: 4vw;
+  color: white;
+  font-size: 1.5vw;
+  background: #85c644;
+  margin-top: 48px !important;
+  /* "&:hover": {
         backgroundColor: "#00750a",
     } */
 }
 
-.getStartBtn :hover{
-    background-color: "#00750a"
+.getStartBtn :hover {
+  background-color: "#00750a";
 }
-
-
 
 /* Resonsive design */
 
-@media screen and (max-width: 715px){
-    .welcome-page-container{
-        padding: 10px 10px;
-        widows: 100%;
-        overflow: hidden;
-    }
-    .pic-title-container{
-        display: block;
-        text-align: center;
-    }
-    .title-container{
-        text-align: center;
-        margin-left: 0 !important;
-    }
+@media screen and (max-width: 715px) {
+  .welcome-page-container {
+    height: auto;
+    padding: 10px 10px;
+    widows: 100%;
+    overflow: hidden;
+  }
+  .pic-title-container {
+    display: block;
+    text-align: center;
+  }
+  .title-container {
+    text-align: center;
+    margin-left: 0 !important;
+  }
 
-    .welcome-text{
-        font-size: 20px;
-        font-weight: bold;
-    }
-    
-    .thrill-text{
-        font-size: 12px;
-        color: #606060;
-    }
-    
-    .detail-text{
-        font-size: 12px;
-        font-weight: bold;
-        color: #404040;
-    }
-    .titleTextField {
-        width: 40px;
-        height: 10px;
-    }
-    
-    .nameTextField {
-        width: 200px;
-        margin-left: 0px;
-    }
+  .welcome-text {
+    font-size: 28px;
+    font-weight: bold;
+  }
 
-    .mid-text-container{
-        /* display: inline-block; */
-        text-align: center;
-        display: block !important;
-        margin-top: 140px !important;
-        /* justify-content: space-around; */
-    }
-    .profession-text{
-        font-size: 16px !important;
-        margin-bottom: 4px !important;
-    }
+  .thrill-text {
+    font-size: 15px;
+    color: #606060;
+  }
 
-    .which-text{
-        font-size: 16px;
-        margin: auto 0;
-        display: block !important;
-    }
-    
-    .add-text{
-        display: block !important;
-        font-size: 14px;
-        color: #606060;
-        margin: auto 0;
-        margin-left: 0px;
-        font-style: italic;
-    }
+  .detail-text {
+    font-size: 15px;
+    font-weight: bold;
+    color: #404040;
+  }
+  .titleTextField {
+    width: 45px;
+    height: 10px;
+  }
 
-    .which-add-container{
-        display: block !important;
-        text-align: center;
-        margin: 16px 0px !important;
-    }
+  .nameTextField {
+    width: 215px;
+    margin-left: 0px;
+  }
 
-    .professionTextField {
-        width: 258px;
-        margin-left: 0px !important;
-    }
+  .mid-text-container {
+    /* display: inline-block; */
+    text-align: center;
+    display: block !important;
+    margin-top: 160px !important;
+    /* justify-content: space-around; */
+  }
+  .profession-text {
+    font-size: 16px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .which-text {
+    font-size: 16px;
+    margin: auto 0;
+    display: block !important;
+  }
+
+  .add-text {
+    display: block !important;
+    font-size: 14px;
+    color: #606060;
+    margin: auto 0;
+    margin-left: 0px;
+    font-style: italic;
+  }
+
+  .which-add-container {
+    display: block !important;
+    text-align: center;
+    margin: 16px 0px !important;
+  }
+
+  .professionTextField {
+    width: 278px;
+    margin-left: 0px !important;
+  }
+
+  .credential-info-backgraound {
+    height: auto;
+    padding-bottom: 10px;
+  }
+
+  .credential-info-container {
+    display: block;
+    text-align: left !important;
+  }
+
+  .right-container {
+      margin-top: -10px;
+  }
+
+  .expiration-date-picker {
+    margin-left: 0 !important;
+  }
+
+  .or-text {
+    font-size: 12px;
+    margin: 0 8px 0 16px;
+  }
+
+  .otherStateBtn {
+    font-size: 12px !important;
+    color: #5894c3 !important;
+  }
+
+  .credential-auto{
+    font-size: 16px;
+    height: 48px;
+    margin-top: 0px !important;
+}
+
+  .checkbox {
+    margin-left: 0px !important;
+    margin-right: -3px !important;
+    margin-top: 8px !important;
+  }
+
+  .bottom-text {
+    font-size: 12px !important;
+    font-style: italic !important;
+    margin-top: 12px !important;
+  }
+
+  .checkbox-container{
+      text-align: center;
+  }
+
+  .question-tooltip{
+    background-color: "Transparent";
+    display: none;
+}
+
+.getStartBtn {
+    width: 150px !important;
+    height: 40px !important;
+    color: white;
+    font-size: 10px !important;
+    background: #85c644;
+    margin-top: 28px !important;
+    margin-bottom: 20px !important;
+  }
+
 }

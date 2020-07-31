@@ -58,16 +58,20 @@ const useStyles = makeStyles({
       fontSize: "15px",
     },
   },
-  otherStateBtn: {
-    fontSize: "16px",
-    color: "#5894C3",
-  },
   datePickerInputLabel: {
     marginTop: "8px",
     fontSize: "22.4px",
+    "@media (max-width:715px)": {
+      // height: "24px",
+      fontSize: "15px",
+    },
   },
   datePickerInput: {
     fontSize: "22.4px",
+    "@media (max-width:715px)": {
+      // height: "24px",
+      fontSize: "15px",
+    },
     root: {
       width: "100%",
     },
@@ -75,6 +79,12 @@ const useStyles = makeStyles({
   disabledButton: {
     background: "#808080",
     color: "white",
+    "@media (max-width:715px)": {
+      background: "#808080",
+      color: "white",
+      width: "80px",
+      height: "30px"
+    },
   },
 });
 
@@ -90,17 +100,34 @@ const defaultMaterialTheme = createMuiTheme({
     },
   },
   overrides: {
+    MuiAutocomplete: {
+      option: {
+        fontSize:"20px"
+      },
+    },
     MuiInput: {
       root: {
         width: "100%",
       },
     },
     MuiSvgIcon: {
-    //   fontSize: "2 px",
-      root:{
+      //   fontSize: "2 px",
+      root: {
         "@media (max-width:715px)": {
-            // fontSize: "14px",
+          // fontSize: "14px",
         },
+      },
+    },
+    MuiFormControl:{
+      root: {
+        "@media (max-width:715px)": {
+          // display:"block";
+        },
+      },
+    },
+    MuiInputBase:{
+      root:{
+        fontSize:"2rem"
       }
     },
     MuiTypography: {
@@ -108,7 +135,37 @@ const defaultMaterialTheme = createMuiTheme({
         fontSize: "19.2px",
       },
       body1: {
-        fontSize: "24px",
+        fontSize: "18px",
+      },
+    },
+  },
+});
+
+const dateTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#5894C3",
+      light: "#5894C3",
+      dark: "#5894C3",
+    },
+    secondary: {
+      main: "#CCE0FF",
+    },
+  },
+  overrides: {
+    MuiTextField:{
+      root: {
+        "@media (max-width:715px)": {
+          width:'100%'
+        },
+      },
+    },
+    MuiTypography: {
+      body2: {
+        fontSize: "15px",
+      },
+      body1: {
+        fontSize: "16px",
       },
     },
   },
@@ -302,7 +359,8 @@ export default function WelcomeAboardPage() {
               }}
             />
           </div>
-          <div className="which-add-container"
+          <div
+            className="which-add-container"
             style={{
               display: "flex",
               // justifyContent: "space-between",
@@ -312,150 +370,140 @@ export default function WelcomeAboardPage() {
             <p className="which-text">
               Which of your credentials require continuing education?
             </p>
-            <p className="add-text"
-             
-
-            >
+            <p className="add-text">
               Add one license, certification, or other credential
             </p>
           </div>
 
-          <div className="credential-info-container">
-            <div className="first-row-container">
-              <div className="state-issuebody-textfield">
-                {otherStateInput ? (
-                  <TextField
-                    id="standard-basic"
-                    // value={licenseNum}
-                    placeholder="Type any issuing body…"
-                    style={{ width: "100%", height: "48px" }}
-                    onChange={handleOtherStateChange}
-                  />
-                ) : (
-                  <div className="stateContainer">
-                    <Autocomplete
-                      options={stateOption}
-                      getOptionLabel={(option) => (option ? option : "")}
-                      style={{ marginBottom: "8px" }}
-                      className="stateAutoCom"
-                      onChange={handleStateChange}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          placeholder={'State(or add "Other" Issuing Body)'}
-                          // inputProps={{
-                          //   style: { fontSize: "1rem" },
-                          // }}
-                        />
-                      )}
+          <div className="credential-info-backgraound">
+            <div className="credential-info-container">
+              <div className="left-container">
+                <div className="state-issuebody-textfield">
+                  {otherStateInput ? (
+                    <TextField
+                      id="standard-basic"
+                      // value={licenseNum}
+                      placeholder="Type any issuing body…"
+                      style={{ width: "100%", height: "48px" }}
+                      onChange={handleOtherStateChange}
                     />
-                    <p
-                      style={{
-                        alignSelf: "center",
-                        fontSize: "24px",
-                        margin: "0 16px 0 48px",
-                        color: "#757575",
-                      }}
-                    >
-                      OR
-                    </p>
-                    <Button
-                      className={classes.otherStateBtn}
-                      onClick={() => {
-                        setOtherStateInput(true);
-                      }}
-                    >
-                      +<br />
-                      other
-                    </Button>
-                  </div>
-                )}
-              </div>
-              <div className="expiration-date-picker">
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <ThemeProvider theme={defaultMaterialTheme}>
-                    <KeyboardDatePicker
-                      disableToolbar
-                      variant="inline"
-                      format="MM/dd/yyyy"
-                      id="date-picker-inline"
-                      label="Expiration date"
-                      value={
-                        expirationDate === "" ? new Date() : expirationDate
-                      }
-                      autoOk
-                      // style={{
-                      //   width: "100%",
-                      // }}
-                      onChange={(date) => setExpirationDate(date)}
-                      KeyboardButtonProps={{
-                        "aria-label": "change date",
-                      }}
-                      InputLabelProps={{
-                        className: classes.datePickerInputLabel,
-                      }}
-                      InputProps={{
-                        className: classes.datePickerInput,
-                        root: {
-                          width: "80%",
-                        },
-                      }}
+                  ) : (
+                    <div className="stateContainer">
+                      <Autocomplete
+                        options={stateOption}
+                        getOptionLabel={(option) => (option ? option : "")}
+                        style={{ marginBottom: "8px" }}
+                        className="stateAutoCom"
+                        onChange={handleStateChange}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            placeholder={'State(or add "Other" Issuing Body)'}
+                            // inputProps={{
+                            //   style: { fontSize: "1rem" },
+                            // }}
+                          />
+                        )}
+                      />
+                      <p
+                        className="or-text"
+                      >
+                        OR
+                      </p>
+                      <Button
+                        className="otherStateBtn"
+                        onClick={() => {
+                          setOtherStateInput(true);
+                        }}
+                      >
+                        +<br />
+                        other
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                <Autocomplete
+                  options={credential}
+                  getOptionLabel={(option) => (option ? option : "")}
+                  onChange={handleLicenseTypeChange}
+                  className="credential-auto"
+                  PopperComponent={(params) => (
+                    <Popper {...params} disablePortal />
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Credential"
+                      required
+                      error={error}
                     />
-                  </ThemeProvider>
-                </MuiPickersUtilsProvider>
-              </div>
-            </div>
-            <div className="second-row-container">
-              <Autocomplete
-                options={credential}
-                getOptionLabel={(option) => (option ? option : "")}
-                onChange={handleLicenseTypeChange}
-                style={{
-                  flex: "3",
-                  fontSize: "16px",
-                  height: "48px",
-                }}
-                PopperComponent={(params) => (
-                  <Popper {...params} disablePortal />
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    placeholder="Credential"
-                    required
-                    error={error}
-                  />
-                )}
-              />
-              <div>
-                <FormControlLabel
-                  control={
-                    <BlueCheckbox
-                      checked={firstCycleChecked === 1}
-                      onChange={handleCycleCheckboxChange}
-                      name="firstCycle"
-                    />
-                  }
-                  label="This is my first renew cycle"
-                  className="checkbox"
+                  )}
                 />
-                <Tooltip
-                  title="Check this box if this is a new credential that you have not renewed yet. This tells us if you may have alternative requirements than for normal, ongoing renewals."
-                  placement="bottom"
-                  arrow
-                  PopperProps={{ disablePortal: true }}
-                >
-                  <button style={{ backgroundColor: "Transparent" }}>
-                    <FontAwesomeIcon
-                      icon={faQuestionCircle}
-                      style={{ color: "#808080" }}
-                      size="lg"
-                    />
-                  </button>
-                </Tooltip>
+              </div>
+              <div className="right-container">
+                <div className="expiration-date-picker">
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <ThemeProvider theme={dateTheme}>
+                      <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="MM/dd/yyyy"
+                        id="date-picker-inline"
+                        label="Expiration date"
+                        value={
+                          expirationDate === "" ? new Date() : expirationDate
+                        }
+                        autoOk
+                        onChange={(date) => setExpirationDate(date)}
+                        KeyboardButtonProps={{
+                          "aria-label": "change date",
+                        }}
+                        InputLabelProps={{
+                          className: classes.datePickerInputLabel,
+                        }}
+                        InputProps={{
+                          className: classes.datePickerInput,
+                          root: {
+                            width: "80%",
+                          },
+                        }}
+                      />
+                    </ThemeProvider>
+                  </MuiPickersUtilsProvider>
+                </div>
+
+                <div className="checkbox-container">
+                  <FormControlLabel
+                    control={
+                      <BlueCheckbox
+                        checked={firstCycleChecked === 1}
+                        onChange={handleCycleCheckboxChange}
+                        name="firstCycle"
+                      />
+                    }
+                    label="This is my first renew cycle"
+                    className="checkbox"
+                  />
+                  <Tooltip
+                    title="Check this box if this is a new credential that you have not renewed yet. This tells us if you may have alternative requirements than for normal, ongoing renewals."
+                    placement="bottom"
+                    arrow
+                    PopperProps={{ disablePortal: true }}
+                  >
+                    <button className="question-tooltip">
+                      <FontAwesomeIcon
+                        icon={faQuestionCircle}
+                        style={{ color: "#808080" }}
+                        size="lg"
+                      />
+                    </button>
+                  </Tooltip>
+                </div>
               </div>
             </div>
-            <div style={{ fontSize: "1.5vw", fontStyle: "italic" }}>
+            <div
+            className="bottom-text"
+            >
               <FontAwesomeIcon
                 icon={faExclamationCircle}
                 style={{ color: "#808080" }}
